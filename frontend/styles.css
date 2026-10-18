@@ -3,41 +3,61 @@
    Design: Dark glassmorphism with vibrant accent system
    ═══════════════════════════════════════════════════════════════ */
 
-/* ─── Design Tokens ─────────────────────────────────────────── */
-/* ─── Design Tokens ─────────────────────────────────────────── */
+/* ─── Exambank AI Design Tokens ─────────────────────────────────────────── */
 :root {
-  --bg-primary: #070a12;
-  --bg-secondary: #0d121f;
-  --bg-tertiary: #131a2b;
-  --bg-card: rgba(18, 24, 38, 0.72);
-  --bg-card-hover: rgba(26, 34, 54, 0.85);
-  --bg-glass: rgba(13, 18, 31, 0.75);
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(129, 140, 248, 0.35);
-  --border-glow: rgba(99, 102, 241, 0.5);
+  /* Exambank Light Theme (Default) */
+  --theme_surface-0: #FFFFFF;
+  --theme_surface-1: #F8FAFC;
+  --theme_surface-2: #F1F5F9;
+  --theme_surface-ink: #0E131B;
+  --theme_heading: #0E131B;
+  --theme_body: #475569;
+  --theme_muted: #94A3B8;
+  --theme_border: #E2E8F0;
+  --theme_border-subtle: #F1F5F9;
+  --theme_cta: #0E131B;
+  --theme_on-cta: #FFFFFF;
 
-  --gre-primary: #6366f1;
-  --gre-secondary: #818cf8;
-  --gre-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-  --gre-glow: rgba(99, 102, 241, 0.35);
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --bg-glass: rgba(255, 255, 255, 0.92);
+  --input-bg: #F8FAFC;
+  --border: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --border-glow: rgba(139, 92, 246, 0.35);
 
-  --ielts-primary: #10b981;
-  --ielts-secondary: #34d399;
-  --ielts-gradient: linear-gradient(135deg, #10b981, #06b6d4);
-  --ielts-glow: rgba(16, 185, 129, 0.35);
+  --text-primary: #0E131B;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
 
-  --vocab-primary: #f59e0b;
-  --vocab-secondary: #fbbf24;
-  --vocab-glow: rgba(245, 158, 11, 0.35);
+  /* Exambank Brand Accents */
+  --gre-primary: #6366F1;
+  --gre-secondary: #8B5CF6;
+  --gre-gradient: linear-gradient(135deg, #6366F1, #8B5CF6);
+  --gre-glow: rgba(99, 102, 241, 0.25);
 
-  --accent-red: #f43f5e;
-  --accent-orange: #f97316;
-  --accent-green: #10b981;
-  --accent-cyan: #06b6d4;
+  --ielts-primary: #0EA5E9;
+  --ielts-secondary: #06B6D4;
+  --ielts-gradient: linear-gradient(135deg, #0EA5E9, #06B6D4);
+  --ielts-glow: rgba(14, 165, 233, 0.25);
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --ui-theme_verbal: #6366F1;
+  --ui-theme_quant: #0EA5E9;
+  --ui-theme_status-complete: #10B981;
+  --ui-theme_correct: #10B981;
+  --ui-theme_incorrect: #F43F5E;
+
+  --vocab-primary: #F59E0B;
+  --vocab-secondary: #FBBF24;
+  --vocab-glow: rgba(245, 158, 11, 0.25);
+
+  --accent-red: #F43F5E;
+  --accent-orange: #F97316;
+  --accent-green: #10B981;
+  --accent-cyan: #06B6D4;
 
   --sidebar-w: 260px;
   --sidebar-collapsed: 72px;
@@ -48,11 +68,10 @@
   --radius-lg: 22px;
   --radius-xl: 30px;
 
-  --shadow-glow-gre: 0 0 40px rgba(99, 102, 241, 0.22);
-  --shadow-glow-ielts: 0 0 40px rgba(16, 185, 129, 0.22);
-  --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
-  --shadow-card-hover: 0 20px 40px -8px rgba(0, 0, 0, 0.6), 0 0 25px -4px rgba(99, 102, 241, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-  --shadow-modal: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 40px rgba(99, 102, 241, 0.15);
+  --shadow-card: 0 4px 20px -2px rgba(14, 19, 27, 0.06), 0 1px 3px rgba(14, 19, 27, 0.04);
+  --shadow-card-hover: 0 16px 36px -6px rgba(14, 19, 27, 0.1), 0 0 20px rgba(99, 102, 241, 0.12);
+  --shadow-modal: 0 25px 60px -15px rgba(14, 19, 27, 0.2);
+  --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.2);
 
   --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-flow: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -60,16 +79,51 @@
   --transition-spring: 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* ─── Exambank Dark Mode ─────────────────────────────────────────── */
+html.dark {
+  --theme_surface-0: #0E131B;
+  --theme_surface-1: #161D27;
+  --theme_surface-2: #1E2736;
+  --theme_surface-ink: #070A0F;
+  --theme_heading: #F8FAFC;
+  --theme_body: #94A3B8;
+  --theme_muted: #64748B;
+  --theme_border: #273244;
+  --theme_border-subtle: #1C2433;
+  --theme_cta: #F8FAFC;
+  --theme_on-cta: #0E131B;
+
+  --bg-primary: #0E131B;
+  --bg-secondary: #161D27;
+  --bg-tertiary: #1E2736;
+  --bg-card: #161D27;
+  --bg-card-hover: #1E2736;
+  --bg-glass: rgba(22, 29, 39, 0.88);
+  --input-bg: rgba(255, 255, 255, 0.06);
+  --border: #273244;
+  --border-hover: #3E4C63;
+  --border-glow: rgba(99, 102, 241, 0.45);
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  --shadow-card: 0 8px 30px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-card-hover: 0 20px 40px -8px rgba(0, 0, 0, 0.65), 0 0 25px rgba(99, 102, 241, 0.25);
+  --shadow-modal: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 40px rgba(99, 102, 241, 0.2);
+  --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.35);
+}
+
 /* ─── Reset & Base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-primary);
   background-image: 
-    radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 90% 10%, rgba(168, 85, 247, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(14, 165, 233, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
   background-attachment: fixed;
   background-repeat: no-repeat;
   color: var(--text-primary);
@@ -78,6 +132,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 a { text-decoration: none; color: inherit; transition: var(--transition); }
 button { font-family: inherit; cursor: pointer; border: none; outline: none; }
@@ -87,9 +142,10 @@ input, select, textarea { font-family: inherit; outline: none; }
 /* ─── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
-
+::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.28); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.45); }
+html.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); }
+html.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.24); }
 
 /* ─── Auth Overlay ──────────────────────────────────────────── */
 .auth-overlay {
@@ -97,14 +153,20 @@ input, select, textarea { font-family: inherit; outline: none; }
   display: flex; align-items: center; justify-content: center;
   background: var(--bg-primary);
   z-index: 1000;
-  overflow: hidden;
+  overflow-y: auto;
+  padding: 30px 16px;
+  transition: background-color 0.3s ease;
 }
 .auth-bg-orbs { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .orb {
   position: absolute; border-radius: 50%;
-  filter: blur(80px); opacity: 0.5;
+  filter: blur(80px); opacity: 0.35;
   animation: float 8s ease-in-out infinite;
 }
+html.dark .orb { opacity: 0.5; }
+.orb-1 { width: 400px; height: 400px; background: var(--gre-primary); top: -100px; left: -100px; animation-delay: 0s; }
+.orb-2 { width: 350px; height: 350px; background: var(--ielts-primary); bottom: -80px; right: -80px; animation-delay: 3s; }
+.orb-3 { width: 250px; height: 250px; background: var(--vocab-primary); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 6s; }
 .orb-1 { width: 400px; height: 400px; background: var(--gre-primary); top: -100px; left: -100px; animation-delay: 0s; }
 .orb-2 { width: 350px; height: 350px; background: var(--ielts-primary); bottom: -80px; right: -80px; animation-delay: 3s; }
 .orb-3 { width: 250px; height: 250px; background: var(--vocab-primary); top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 6s; }
@@ -139,20 +201,21 @@ input, select, textarea { font-family: inherit; outline: none; }
 .brand-tagline { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; }
 
 .auth-form {
-  background: rgba(255,255,255,0.04);
+  background: var(--bg-card);
   backdrop-filter: blur(24px);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: 36px;
   display: none;
   animation: slideUp 0.4s ease;
+  box-shadow: var(--shadow-modal);
 }
 .auth-form.active { display: block; }
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.auth-form h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; }
+.auth-form h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--text-primary); }
 .auth-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px; margin-bottom: 28px; }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -160,7 +223,7 @@ input, select, textarea { font-family: inherit; outline: none; }
 .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
 .form-group input, .form-group select {
   width: 100%; padding: 12px 14px;
-  background: rgba(255,255,255,0.06);
+  background: var(--input-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
@@ -169,10 +232,10 @@ input, select, textarea { font-family: inherit; outline: none; }
 }
 .form-group input:focus, .form-group select:focus {
   border-color: var(--gre-primary);
-  background: rgba(108,99,255,0.08);
-  box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
-.form-group select option { background: var(--bg-secondary); }
+.form-group select option { background: var(--bg-secondary); color: var(--text-primary); }
 
 .auth-error {
   background: rgba(239,68,68,0.1);
@@ -1657,3 +1720,574 @@ input, select, textarea { font-family: inherit; outline: none; }
   .ielts-split-pane, .ielts-writing-split { flex-direction: column; }
   .ielts-passage-pane, .ielts-writing-prompt-pane { height: 40vh; border-right: none; border-bottom: 2px solid #1f2937; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   EXAMBANK AI COMPONENT SYSTEM & DARK MODE ENGINE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Exambank Typography & Animations ───────────────────────── */
+.text-gradient-animated {
+  background: linear-gradient(135deg, #8B5CF6 0%, #0EA5E9 45%, #EC4899 85%, #8B5CF6 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease-in-out infinite;
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ─── Theme Toggle Button ────────────────────────────────────── */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.theme-toggle-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--gre-primary);
+  transform: translateY(-1px);
+}
+
+/* ─── Signature Exambank Rainbow Border Button ───────────────── */
+.btn-exambank-rainbow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 12px;
+  background: transparent;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 18px rgba(139, 92, 246, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-exambank-rainbow::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, #8B5CF6, #0EA5E9, #10B981, #EC4899, #8B5CF6);
+  animation: rainbowSpin 4s linear infinite;
+  z-index: 1;
+}
+.btn-exambank-rainbow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(139, 92, 246, 0.4);
+}
+.btn-exambank-rainbow:hover::before {
+  animation-duration: 2s;
+}
+.btn-exambank-rainbow-inner {
+  position: relative;
+  z-index: 2;
+  padding: 10px 22px;
+  border-radius: 10px;
+  background: var(--theme_cta);
+  color: var(--theme_on-cta);
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.2s ease;
+}
+@keyframes rainbowSpin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ─── Exambank Hero Section ──────────────────────────────────── */
+.hero-exambank {
+  position: relative;
+  width: 100%;
+  padding: 40px 0 24px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40px;
+  align-items: center;
+}
+@media (max-width: 992px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+.hero-headline {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+.hero-subhead {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+.hero-meta-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.hero-meta-dot {
+  color: var(--text-muted);
+}
+
+/* Floating Hero Pills */
+.hero-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+.hero-tag-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hero-tag-pill:hover {
+  transform: translateX(4px);
+  border-color: var(--gre-primary);
+  box-shadow: var(--shadow-card-hover);
+}
+.tag-icon-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.tag-icon-verbal { background: rgba(139, 92, 246, 0.15); color: #8B5CF6; }
+.tag-icon-quant { background: rgba(14, 165, 233, 0.15); color: #0EA5E9; }
+.tag-icon-complete { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+.tag-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.tag-desc {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+/* ─── University Trust Strip & Marquee ────────────────────────── */
+.university-trust-section {
+  width: 100%;
+  padding: 24px 0 32px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 28px 0;
+}
+.trust-label {
+  display: block;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
+.trust-logos-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.univ-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.univ-badge:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  border-color: var(--gre-primary);
+}
+
+/* ─── Exambank Seam & Ink Contrast Section ───────────────────── */
+.seam-transition {
+  width: 100%;
+  height: 24px;
+  background: #0E131B;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+.score-forecast-ink-section {
+  width: 100%;
+  background: #0E131B;
+  color: #F8FAFC;
+  padding: 40px 24px 48px;
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  margin-bottom: 32px;
+}
+html.dark .score-forecast-ink-section {
+  background: #090C11;
+  border: 1px solid #1F2836;
+}
+.score-ink-header {
+  max-width: 650px;
+  margin-bottom: 32px;
+}
+.score-ink-header h2 {
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: #F8FAFC;
+  margin-bottom: 10px;
+}
+.score-ink-header p {
+  font-size: 0.95rem;
+  color: #94A3B8;
+  line-height: 1.55;
+}
+
+/* Radial Gauge Cards Grid */
+.score-gauges-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+.radial-gauge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.gauge-svg-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gauge-center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.gauge-score-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #F8FAFC;
+  line-height: 1;
+}
+.gauge-max-score {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #64748B;
+}
+.radial-gauge-card.overall .gauge-score-value {
+  font-size: 2.1rem;
+}
+.gauge-meta-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+.gauge-section-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #F8FAFC;
+}
+.score-delta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #10B981;
+}
+
+/* Quick Wins Box inside Ink Section */
+.quick-wins-panel {
+  margin-top: 36px;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.quick-wins-panel h3 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #38BDF8;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.quick-wins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.quick-win-item {
+  background: rgba(14, 19, 27, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.qw-topic {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #F8FAFC;
+}
+.qw-action {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  line-height: 1.4;
+}
+.qw-points {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #10B981;
+  margin-top: 4px;
+}
+
+/* ─── Adaptive Study Plans ────────────────────────────────────── */
+.study-plans-section {
+  margin-top: 36px;
+}
+.section-headline-center {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 28px;
+}
+.section-headline-center h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.section-headline-center p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+.study-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.study-plan-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.study-plan-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gre-primary);
+  box-shadow: var(--shadow-card-hover);
+}
+.study-plan-card.featured {
+  border-color: var(--gre-primary);
+}
+.study-plan-card.featured::after {
+  content: 'MOST POPULAR';
+  position: absolute;
+  top: 14px;
+  right: -32px;
+  background: linear-gradient(135deg, var(--gre-primary), #8B5CF6);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 4px 34px;
+  transform: rotate(45deg);
+}
+.plan-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.plan-tagline {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.plan-features li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.plan-features li span {
+  color: #10B981;
+  font-weight: 700;
+}
+
+/* ─── Exambank Error Log & AI Diagnostic Box ──────────────────── */
+.error-log-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.error-log-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease;
+}
+.error-log-card:hover {
+  border-color: var(--accent-red);
+}
+.error-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.error-tag-red {
+  background: rgba(244, 63, 94, 0.12);
+  color: #F43F5E;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+.error-prompt-text {
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.error-choices-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  font-size: 0.85rem;
+}
+.your-wrong-choice {
+  color: #F43F5E;
+  font-weight: 600;
+}
+.the-correct-choice {
+  color: #10B981;
+  font-weight: 600;
+}
+.error-explanation-box {
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--gre-primary);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ─── AI Tutor Diagnostic Panel ───────────────────────────────── */
+.ai-tutor-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(14, 165, 233, 0.08));
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+@media (max-width: 768px) {
+  .ai-tutor-banner { flex-direction: column; align-items: flex-start; }
+}
+.ai-tutor-banner h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-tutor-banner p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  max-width: 55ch;
+}
+

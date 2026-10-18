@@ -1,159 +1,406 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PrepAce – GRE & IELTS Exam Preparation Platform</title>
-  <meta name="description" content="Master GRE and IELTS with AI-powered practice tests, adaptive flashcards, and in-depth analytics. Study smarter, score higher." />
+  <title>Exambank AI – GRE & IELTS Exam Preparation & Score Forecasting</title>
+  <meta name="description" content="Adaptive GRE & IELTS prep app with 10,000+ questions, predictive score forecasting dials, guided AI tutor explanations, and personalized study plans." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 <body>
 
-<!-- ─── Auth Overlay ──────────────────────────────────────────────────────── -->
+<!-- ─── Auth & Landing Showcase Overlay ───────────────────────────────────── -->
 <div id="auth-overlay" class="auth-overlay">
   <div class="auth-bg-orbs">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
-  <div class="auth-container">
-    <div class="auth-brand">
-      <div class="brand-icon">🎓</div>
-      <h1 class="brand-name">PrepAce</h1>
-      <p class="brand-tagline">GRE & IELTS Mastery Platform</p>
+
+  <!-- Exambank Landing Top Bar -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showLogin()">
+      <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--gre-primary),#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:18px;">🎓</div>
+      <span style="font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:-0.02em;color:var(--text-primary);">Exambank<span style="color:var(--gre-primary);">.ai</span></span>
     </div>
     
-    <!-- Login Form -->
-    <div id="login-form" class="auth-form active">
-      <h2>Welcome back</h2>
-      <p class="auth-subtitle">Continue your exam preparation journey</p>
-      <div class="form-group">
-        <label>Email Address or Phone Number</label>
-        <input type="text" id="login-email" placeholder="your@email.com or +91 98765 43210" autocomplete="username" />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin:-4px 0 14px 0;font-size:0.82rem;">
-        <a href="#" onclick="showOTPLoginForm()" style="color:var(--primary);font-weight:600;text-decoration:none;">📱 Login with Phone OTP</a>
-        <a href="#" onclick="showForgotPasswordForm()" style="color:var(--text-muted);text-decoration:none;">Forgot password?</a>
-      </div>
-      <div id="login-error" class="auth-error hidden"></div>
-      <button class="btn btn-primary btn-full" id="login-btn" onclick="handleLogin()">
-        <span class="btn-text">Sign In</span>
-        <span class="btn-loader hidden">⏳</span>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark / Light Mode">
+        <span class="theme-label-text">☀️ Light</span>
       </button>
-      <p class="auth-switch">Don't have an account? <a href="#" onclick="showRegister()">Create one free</a></p>
-    </div>
-
-    <!-- Phone OTP Login Form -->
-    <div id="otp-login-form" class="auth-form">
-      <h2>Login with Mobile OTP</h2>
-      <p class="auth-subtitle">We will send a 6-digit verification code to your phone</p>
-      <div class="form-group">
-        <label>Mobile Phone Number</label>
-        <div style="display:flex;gap:8px;">
-          <input type="tel" id="otp-login-phone" placeholder="+91 98765 43210" style="flex:1;" />
-          <button class="btn btn-secondary btn-sm" id="otp-login-send-btn" onclick="handleSendOTPLogin()" style="white-space:nowrap;">Send OTP</button>
-        </div>
-      </div>
-      <div id="otp-login-code-group" class="form-group hidden">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <label style="margin-bottom:0;">Enter 6-Digit OTP</label>
-          <span id="otp-login-countdown" style="font-size:0.75rem;color:var(--primary);font-weight:600;"></span>
-        </div>
-        <input type="text" id="otp-login-code" placeholder="e.g. 482910" maxlength="6" style="letter-spacing:4px;font-weight:700;font-size:1.1rem;text-align:center;" />
-      </div>
-      <div id="otp-login-error" class="auth-error hidden"></div>
-      <div id="otp-login-success" class="auth-success hidden" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.84rem;margin-bottom:12px;"></div>
-      <button class="btn btn-primary btn-full" id="otp-verify-login-btn" onclick="handleVerifyOTPLogin()" disabled>
-        <span class="btn-text">Verify & Sign In</span>
-        <span class="btn-loader hidden">⏳</span>
+      <button class="btn btn-outline btn-sm" onclick="showLogin()">Sign In</button>
+      <button class="btn-exambank-rainbow" onclick="showRegister()">
+        <span class="btn-exambank-rainbow-inner">
+          <span>Try Exambank free</span>
+          <span>→</span>
+        </span>
       </button>
-      <div style="margin-top:16px;text-align:center;font-size:0.84rem;">
-        <a href="#" onclick="showLogin()" style="color:var(--text-secondary);text-decoration:none;">← Back to password login</a>
-      </div>
     </div>
+  </header>
 
-    <!-- Forgot Password via Phone OTP Form -->
-    <div id="forgot-password-form" class="auth-form">
-      <h2>Reset Password</h2>
-      <p class="auth-subtitle">An OTP will be sent to your registered mobile number</p>
-      <div class="form-group">
-        <label>Registered Mobile Phone Number</label>
-        <div style="display:flex;gap:8px;">
-          <input type="tel" id="fp-phone" placeholder="+91 98765 43210" style="flex:1;" />
-          <button class="btn btn-secondary btn-sm" id="fp-send-btn" onclick="handleSendForgotOTP()" style="white-space:nowrap;">Send OTP</button>
-        </div>
-      </div>
-      <div id="fp-fields-group" class="hidden">
-        <div class="form-group">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label style="margin-bottom:0;">6-Digit Verification Code</label>
-            <span id="fp-countdown" style="font-size:0.75rem;color:var(--primary);font-weight:600;"></span>
+  <!-- Landing Content Container -->
+  <div style="width:100%;max-width:1180px;margin:80px auto 40px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
+    
+    <!-- Hero Section -->
+    <section class="hero-exambank">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:9999px;background:var(--bg-tertiary);border:1px solid var(--border);font-size:0.78rem;font-weight:600;color:var(--text-secondary);">
+            <span>⚡ Adaptive Prep Engine</span>
+            <span class="hero-meta-dot">·</span>
+            <span>Gemini AI Tutor</span>
           </div>
-          <input type="text" id="fp-otp" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;font-weight:700;font-size:1.05rem;text-align:center;" />
+
+          <h1 class="hero-headline">
+            Prepare for the GRE with <span class="text-gradient-animated">Exambank</span>
+          </h1>
+
+          <p class="hero-subhead">
+            Over 10,000 questions and 25 practice tests, free. Adaptive practice, guided help when you're stuck, and a predictive score forecasting plan that updates as you improve.
+          </p>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px;">
+            <button class="btn-exambank-rainbow" onclick="showRegister()">
+              <span class="btn-exambank-rainbow-inner" style="padding:12px 28px;font-size:1rem;">
+                <span>Try Exambank free</span>
+                <span>→</span>
+              </span>
+            </button>
+            <button class="btn btn-outline" onclick="showOTPLoginForm()" style="padding:12px 22px;border-radius:12px;font-weight:600;">
+              <span>📱 Instant Phone OTP Login</span>
+            </button>
+          </div>
+
+          <div class="hero-meta-strip">
+            <span>8,000+ users</span>
+            <span class="hero-meta-dot">·</span>
+            <span>50+ countries</span>
+            <span class="hero-meta-dot">·</span>
+            <span>No card needed</span>
+          </div>
         </div>
-        <div class="form-group">
-          <label>New Password</label>
-          <input type="password" id="fp-new-password" placeholder="At least 6 characters" />
+
+        <!-- Hero Floating Feature Pills -->
+        <div class="hero-visual">
+          <div class="hero-tag-pill">
+            <div class="tag-icon-circle tag-icon-verbal">📚</div>
+            <div>
+              <div class="tag-title">Reading in idea chunks</div>
+              <div class="tag-desc">Text Completion &amp; Sentence Equivalence</div>
+            </div>
+          </div>
+
+          <div class="hero-tag-pill">
+            <div class="tag-icon-circle tag-icon-quant">⚡</div>
+            <div>
+              <div class="tag-title">Vocab sprint</div>
+              <div class="tag-desc">High-frequency GRE &amp; IELTS words with mnemonics</div>
+            </div>
+          </div>
+
+          <div class="hero-tag-pill">
+            <div class="tag-icon-circle tag-icon-complete">📊</div>
+            <div>
+              <div class="tag-title">Data interpretation</div>
+              <div class="tag-desc">Quantitative comparisons &amp; multi-source reasoning</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="fp-error" class="auth-error hidden"></div>
-      <div id="fp-success" class="auth-success hidden" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.84rem;margin-bottom:12px;"></div>
-      <button class="btn btn-primary btn-full" id="fp-submit-btn" onclick="handleResetPasswordOTP()" disabled>
-        <span class="btn-text">Verify OTP & Set New Password</span>
-        <span class="btn-loader hidden">⏳</span>
-      </button>
-      <div style="margin-top:16px;text-align:center;font-size:0.84rem;">
-        <a href="#" onclick="showLogin()" style="color:var(--text-secondary);text-decoration:none;">← Return to Sign In</a>
+    </section>
+
+    <!-- University Trust Section -->
+    <div class="university-trust-section">
+      <span class="trust-label">Created by researchers and tutors from</span>
+      <div class="trust-logos-row">
+        <div class="univ-badge">🏛️ Harvard University</div>
+        <div class="univ-badge">🎓 University of Oxford</div>
+        <div class="univ-badge">📚 University of Cambridge</div>
+        <div class="univ-badge">🔬 Imperial College London</div>
       </div>
     </div>
-    
-    <!-- Register Form -->
-    <div id="register-form" class="auth-form">
-      <h2>Get started free</h2>
-      <p class="auth-subtitle">Join thousands preparing for GRE & IELTS</p>
-      <div class="form-row">
+
+    <!-- Auth Forms Container (Centered modal) -->
+    <div class="auth-container" style="max-width:480px;width:100%;margin:20px 0;">
+      <!-- Login Form -->
+      <div id="login-form" class="auth-form active">
+        <h2>Welcome back</h2>
+        <p class="auth-subtitle">Continue your exam preparation journey</p>
         <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="reg-username" placeholder="johndoe" />
+          <label>Email Address or Phone Number</label>
+          <input type="text" id="login-email" placeholder="your@email.com or +91 98765 43210" autocomplete="username" />
         </div>
         <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="reg-email" placeholder="your@email.com" />
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:-4px 0 14px 0;font-size:0.82rem;">
+          <a href="#" onclick="showOTPLoginForm()" style="color:var(--gre-primary);font-weight:600;text-decoration:none;">📱 Login with Phone OTP</a>
+          <a href="#" onclick="showForgotPasswordForm()" style="color:var(--text-muted);text-decoration:none;">Forgot password?</a>
+        </div>
+        <div id="login-error" class="auth-error hidden"></div>
+        <button class="btn btn-primary btn-full" id="login-btn" onclick="handleLogin()">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-loader hidden">⏳</span>
+        </button>
+        <p class="auth-switch">Don't have an account? <a href="#" onclick="showRegister()">Create one free</a></p>
+      </div>
+
+      <!-- Phone OTP Login Form -->
+      <div id="otp-login-form" class="auth-form">
+        <h2>Login with Mobile OTP</h2>
+        <p class="auth-subtitle">We will send a 6-digit verification code to your phone</p>
+        <div class="form-group">
+          <label>Mobile Phone Number</label>
+          <div style="display:flex;gap:8px;">
+            <input type="tel" id="otp-login-phone" placeholder="+91 98765 43210" style="flex:1;" />
+            <button class="btn btn-secondary btn-sm" id="otp-login-send-btn" onclick="handleSendOTPLogin()" style="white-space:nowrap;">Send OTP</button>
+          </div>
+        </div>
+        <div id="otp-login-code-group" class="form-group hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <label style="margin-bottom:0;">Enter 6-Digit OTP</label>
+            <span id="otp-login-countdown" style="font-size:0.75rem;color:var(--gre-primary);font-weight:600;"></span>
+          </div>
+          <input type="text" id="otp-login-code" placeholder="e.g. 482910" maxlength="6" style="letter-spacing:4px;font-weight:700;font-size:1.1rem;text-align:center;" />
+        </div>
+        <div id="otp-login-error" class="auth-error hidden"></div>
+        <div id="otp-login-success" class="auth-success hidden" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.84rem;margin-bottom:12px;"></div>
+        <button class="btn btn-primary btn-full" id="otp-verify-login-btn" onclick="handleVerifyOTPLogin()" disabled>
+          <span class="btn-text">Verify &amp; Sign In</span>
+          <span class="btn-loader hidden">⏳</span>
+        </button>
+        <div style="margin-top:16px;text-align:center;font-size:0.84rem;">
+          <a href="#" onclick="showLogin()" style="color:var(--text-secondary);text-decoration:none;">← Back to password login</a>
         </div>
       </div>
-      <div class="form-group">
-        <label>Mobile Phone Number (for OTP Login & Recovery)</label>
-        <input type="tel" id="reg-phone" placeholder="+91 98765 43210" />
+
+      <!-- Forgot Password via Phone OTP Form -->
+      <div id="forgot-password-form" class="auth-form">
+        <h2>Reset Password</h2>
+        <p class="auth-subtitle">An OTP will be sent to your registered mobile number</p>
+        <div class="form-group">
+          <label>Registered Mobile Phone Number</label>
+          <div style="display:flex;gap:8px;">
+            <input type="tel" id="fp-phone" placeholder="+91 98765 43210" style="flex:1;" />
+            <button class="btn btn-secondary btn-sm" id="fp-send-btn" onclick="handleSendForgotOTP()" style="white-space:nowrap;">Send OTP</button>
+          </div>
+        </div>
+        <div id="fp-fields-group" class="hidden">
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <label style="margin-bottom:0;">6-Digit Verification Code</label>
+              <span id="fp-countdown" style="font-size:0.75rem;color:var(--gre-primary);font-weight:600;"></span>
+            </div>
+            <input type="text" id="fp-otp" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:4px;font-weight:700;font-size:1.05rem;text-align:center;" />
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="fp-new-password" placeholder="At least 6 characters" />
+          </div>
+        </div>
+        <div id="fp-error" class="auth-error hidden"></div>
+        <div id="fp-success" class="auth-success hidden" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.25);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.84rem;margin-bottom:12px;"></div>
+        <button class="btn btn-primary btn-full" id="fp-submit-btn" onclick="handleResetPasswordOTP()" disabled>
+          <span class="btn-text">Verify OTP &amp; Set New Password</span>
+          <span class="btn-loader hidden">⏳</span>
+        </button>
+        <div style="margin-top:16px;text-align:center;font-size:0.84rem;">
+          <a href="#" onclick="showLogin()" style="color:var(--text-secondary);text-decoration:none;">← Return to Sign In</a>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="reg-password" placeholder="Min. 8 characters" />
+      
+      <!-- Register Form -->
+      <div id="register-form" class="auth-form">
+        <h2>Get started free</h2>
+        <p class="auth-subtitle">Join thousands preparing for GRE &amp; IELTS</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="reg-username" placeholder="johndoe" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" placeholder="your@email.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mobile Phone Number (for OTP Login &amp; Recovery)</label>
+          <input type="tel" id="reg-phone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="reg-password" placeholder="Min. 8 characters" />
+        </div>
+        <div class="form-group">
+          <label>Target Exam</label>
+          <select id="reg-exam">
+            <option value="both">Both GRE &amp; IELTS</option>
+            <option value="gre">GRE Only</option>
+            <option value="ielts">IELTS Only</option>
+          </select>
+        </div>
+        <div id="reg-error" class="auth-error hidden"></div>
+        <button class="btn btn-primary btn-full" id="reg-btn" onclick="handleRegister()">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-loader hidden">⏳</span>
+        </button>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="showLogin()">Sign in</a></p>
       </div>
-      <div class="form-group">
-        <label>Target Exam</label>
-        <select id="reg-exam">
-          <option value="both">Both GRE & IELTS</option>
-          <option value="gre">GRE Only</option>
-          <option value="ielts">IELTS Only</option>
-        </select>
-      </div>
-      <div id="reg-error" class="auth-error hidden"></div>
-      <button class="btn btn-primary btn-full" id="reg-btn" onclick="handleRegister()">
-        <span class="btn-text">Create Account</span>
-        <span class="btn-loader hidden">⏳</span>
-      </button>
-      <p class="auth-switch">Already have an account? <a href="#" onclick="showLogin()">Sign in</a></p>
     </div>
+
+    <!-- Exambank Ink Section: Score Forecasting -->
+    <div class="score-forecast-ink-section" style="width:100%;margin-top:20px;">
+      <div class="score-ink-header">
+        <h2>Our score forecasting helps you identify the quick wins</h2>
+        <p>Your estimated Quant, Verbal, and Overall scores update as you practice. Your plan then puts more work on the topics costing you the most points.</p>
+      </div>
+
+      <!-- 3 Radial Segmented SVG Gauges -->
+      <div class="score-gauges-row">
+        <!-- Verbal Dial -->
+        <div class="radial-gauge-card">
+          <div class="gauge-svg-wrap" style="width:150px;height:150px;">
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <circle cx="75" cy="75" r="58" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10" stroke-dasharray="7 5" />
+              <circle id="landing-verbal-arc" cx="75" cy="75" r="58" fill="none" stroke="#8B5CF6" stroke-width="10" stroke-dasharray="270 364" stroke-linecap="round" transform="rotate(-90 75 75)" />
+            </svg>
+            <div class="gauge-center-text">
+              <span class="gauge-score-value">156</span>
+              <span class="gauge-max-score">/170</span>
+            </div>
+          </div>
+          <div class="gauge-meta-bottom">
+            <span class="gauge-section-name">Verbal</span>
+            <span class="score-delta-badge">▲ +2 vs last week</span>
+          </div>
+        </div>
+
+        <!-- Overall Dial (Center / Elevated) -->
+        <div class="radial-gauge-card overall">
+          <div class="gauge-svg-wrap" style="width:188px;height:188px;">
+            <svg width="188" height="188" viewBox="0 0 188 188">
+              <circle cx="94" cy="94" r="74" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="12" stroke-dasharray="8 6" />
+              <circle id="landing-overall-arc" cx="94" cy="94" r="74" fill="none" stroke="url(#gradient-vq-hero)" stroke-width="12" stroke-dasharray="355 465" stroke-linecap="round" transform="rotate(-90 94 94)" />
+              <defs>
+                <linearGradient id="gradient-vq-hero" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8B5CF6" />
+                  <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="gauge-center-text">
+              <span class="gauge-score-value">318</span>
+              <span class="gauge-max-score">/340</span>
+            </div>
+          </div>
+          <div class="gauge-meta-bottom">
+            <span class="gauge-section-name" style="font-size:1.2rem;">Overall</span>
+            <span class="score-delta-badge">▲ +5 vs last week</span>
+          </div>
+        </div>
+
+        <!-- Quant Dial -->
+        <div class="radial-gauge-card">
+          <div class="gauge-svg-wrap" style="width:150px;height:150px;">
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <circle cx="75" cy="75" r="58" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10" stroke-dasharray="7 5" />
+              <circle id="landing-quant-arc" cx="75" cy="75" r="58" fill="none" stroke="#0EA5E9" stroke-width="10" stroke-dasharray="290 364" stroke-linecap="round" transform="rotate(-90 75 75)" />
+            </svg>
+            <div class="gauge-center-text">
+              <span class="gauge-score-value">162</span>
+              <span class="gauge-max-score">/170</span>
+            </div>
+          </div>
+          <div class="gauge-meta-bottom">
+            <span class="gauge-section-name">Quant</span>
+            <span class="score-delta-badge">▲ +3 vs last week</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Wins Panel -->
+      <div class="quick-wins-panel">
+        <h3>⚡ High-Impact Point Boosters</h3>
+        <div class="quick-wins-grid">
+          <div class="quick-win-item">
+            <div class="qw-topic">Data Interpretation Charts</div>
+            <div class="qw-action">Master percentage changes and multi-axis graph comparisons</div>
+            <div class="qw-points">+2.5 estimated points</div>
+          </div>
+          <div class="quick-win-item">
+            <div class="qw-topic">Text Completion Dual-Blanks</div>
+            <div class="qw-action">Apply contrast trigger words and idea chunks parsing</div>
+            <div class="qw-points">+3.0 estimated points</div>
+          </div>
+          <div class="quick-win-item">
+            <div class="qw-topic">Quantitative Comparisons</div>
+            <div class="qw-action">Plug in boundary test numbers: -1, 0, 1, and 1/2</div>
+            <div class="qw-points">+2.0 estimated points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Study Plans Section -->
+    <div class="study-plans-section" style="width:100%;margin-top:36px;">
+      <div class="section-headline-center">
+        <h2>A study plan built around you</h2>
+        <p>Choose between our 4-, 8-, and 12-week plans. Unlike other study plans, ours adapt to what you need most, because practice should always be personal.</p>
+      </div>
+
+      <div class="study-plans-grid">
+        <div class="study-plan-card">
+          <div class="plan-header">
+            <h3>4-Week Sprint</h3>
+            <div class="plan-tagline">Rapid review for students taking the exam next month</div>
+          </div>
+          <ul class="plan-features">
+            <li><span>✓</span> Daily high-yield question drills (20 Qs/day)</li>
+            <li><span>✓</span> High-frequency 500 vocabulary sprint</li>
+            <li><span>✓</span> 2 full-length section-timed mock tests</li>
+            <li><span>✓</span> Error log diagnostics &amp; review mode</li>
+          </ul>
+          <button class="btn btn-outline btn-full" onclick="showRegister()">Choose 4-Week Plan</button>
+        </div>
+
+        <div class="study-plan-card featured">
+          <div class="plan-header">
+            <h3>8-Week Standard</h3>
+            <div class="plan-tagline">Balanced curriculum for comprehensive 325+ mastery</div>
+          </div>
+          <ul class="plan-features">
+            <li><span>✓</span> Complete Verbal &amp; Quant concept modules</li>
+            <li><span>✓</span> 1,200+ spaced repetition vocab flashcards</li>
+            <li><span>✓</span> 5 full ETS/IDP simulated mock tests</li>
+            <li><span>✓</span> AI Tutor unlimited diagnostic breakdowns</li>
+            <li><span>✓</span> Score forecasting updates each Sunday</li>
+          </ul>
+          <button class="btn btn-primary btn-full" onclick="showRegister()">Choose 8-Week Plan</button>
+        </div>
+
+        <div class="study-plan-card">
+          <div class="plan-header">
+            <h3>12-Week Comprehensive</h3>
+            <div class="plan-tagline">Deep dive from foundational math to 99th-percentile tricks</div>
+          </div>
+          <ul class="plan-features">
+            <li><span>✓</span> Full curriculum covering all 24 question archetypes</li>
+            <li><span>✓</span> Complete 2.58M vocabulary engine access</li>
+            <li><span>✓</span> 8 full-length mock examinations with grading</li>
+            <li><span>✓</span> Weekly personalized tutor recommendations</li>
+          </ul>
+          <button class="btn btn-outline btn-full" onclick="showRegister()">Choose 12-Week Plan</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+
 
 <!-- ─── Main App ──────────────────────────────────────────────────────────── -->
 <div id="app" class="app hidden">
@@ -162,14 +409,24 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand-icon-sm">🎓</div>
-      <span class="sidebar-brand">PrepAce</span>
+      <span class="sidebar-brand">Exambank<span style="color:var(--gre-primary);">.ai</span></span>
       <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebar-toggle">☰</button>
     </div>
     <nav class="sidebar-nav">
       <a href="#" class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
         <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
       </a>
-      <div class="nav-section-label">GRE</div>
+      <div class="nav-section-label">Exambank AI</div>
+      <a href="#" class="nav-item" data-page="score-forecast" onclick="navigate('score-forecast')">
+        <span class="nav-icon">🎯</span><span class="nav-label">Score Forecast</span>
+      </a>
+      <a href="#" class="nav-item" data-page="error-log" onclick="navigate('error-log')">
+        <span class="nav-icon">⚠️</span><span class="nav-label">Error Log</span>
+      </a>
+      <a href="#" class="nav-item" data-page="study-plans" onclick="navigate('study-plans')">
+        <span class="nav-icon">📅</span><span class="nav-label">Study Plans</span>
+      </a>
+      <div class="nav-section-label">GRE Track</div>
       <a href="#" class="nav-item" data-page="gre-verbal" onclick="navigate('gre-verbal')">
         <span class="nav-icon">📚</span><span class="nav-label">Verbal Reasoning</span>
       </a>
@@ -179,7 +436,7 @@
       <a href="#" class="nav-item" data-page="gre-awa" onclick="navigate('gre-awa')">
         <span class="nav-icon">✍️</span><span class="nav-label">AWA Writing</span>
       </a>
-      <div class="nav-section-label">IELTS</div>
+      <div class="nav-section-label">IELTS Track</div>
       <a href="#" class="nav-item" data-page="ielts-reading" onclick="navigate('ielts-reading')">
         <span class="nav-icon">📖</span><span class="nav-label">Reading</span>
       </a>
@@ -201,6 +458,9 @@
       </a>
     </nav>
     <div class="sidebar-footer">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" style="width:100%;margin-bottom:8px;justify-content:center;">
+        <span class="theme-label-text">☀️ Light Mode</span>
+      </button>
       <div class="user-info" id="sidebar-user">
         <div class="user-avatar" id="user-avatar">J</div>
         <div class="user-details">
@@ -216,7 +476,7 @@
   <main class="main-content" id="main-content">
     <div class="page-header" id="page-header">
       <div class="header-left">
-        <div class="header-breadcrumb" id="header-breadcrumb">PrepAce &nbsp;/&nbsp; Practice &nbsp;/&nbsp; <span>Overview</span></div>
+        <div class="header-breadcrumb" id="header-breadcrumb">Exambank &nbsp;/&nbsp; Practice &nbsp;/&nbsp; <span>Overview</span></div>
         <h1 id="page-title">Dashboard</h1>
       </div>
       <div class="header-actions">
@@ -227,6 +487,11 @@
           <button class="exam-pill" id="pill-ielts" onclick="filterExamMode('ielts')">IELTS</button>
         </div>
         
+        <!-- Theme Switcher Button -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark / Light Mode">
+          <span class="theme-label-text">☀️ Light</span>
+        </button>
+
         <!-- Subtle AI Status Pill -->
         <div class="ai-status-pill" id="ai-badge" title="Gemini 3.8 Flash &amp; Infinite Procedural Engine Active">
           <span class="ai-dot"></span>
@@ -252,7 +517,7 @@
       <div class="welcome-banner" id="welcome-banner">
         <div class="welcome-text">
           <h2 id="welcome-greeting">Good evening 👋</h2>
-          <p>GRE &amp; IELTS adaptive preparation platform powered by Gemini AI.</p>
+          <p>Exambank adaptive preparation platform powered by Gemini AI.</p>
         </div>
         <div class="welcome-stats">
           <div class="mini-stat">
@@ -271,6 +536,83 @@
           </div>
         </div>
       </div>
+
+      <!-- Exambank Score Forecasting Ink Section on Dashboard -->
+      <div class="score-forecast-ink-section" style="margin-top:20px;">
+        <div class="score-ink-header">
+          <h2>Score Forecasting &amp; Quick Wins</h2>
+          <p>Your estimated Quant, Verbal, and Overall scores dynamically calibrate as you complete questions.</p>
+        </div>
+
+        <div class="score-gauges-row">
+          <!-- Verbal Dial -->
+          <div class="radial-gauge-card">
+            <div class="gauge-svg-wrap" style="width:140px;height:140px;">
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10" stroke-dasharray="7 5" />
+                <circle id="dash-verbal-arc" cx="70" cy="70" r="54" fill="none" stroke="#8B5CF6" stroke-width="10" stroke-dasharray="250 339" stroke-linecap="round" transform="rotate(-90 70 70)" />
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-score-value" id="dash-verbal-score">156</span>
+                <span class="gauge-max-score">/170</span>
+              </div>
+            </div>
+            <div class="gauge-meta-bottom">
+              <span class="gauge-section-name">Verbal</span>
+              <span class="score-delta-badge" id="dash-verbal-delta">▲ +2 vs last week</span>
+            </div>
+          </div>
+
+          <!-- Overall Dial -->
+          <div class="radial-gauge-card overall">
+            <div class="gauge-svg-wrap" style="width:176px;height:176px;">
+              <svg width="176" height="176" viewBox="0 0 176 176">
+                <circle cx="88" cy="88" r="68" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="12" stroke-dasharray="8 6" />
+                <circle id="dash-overall-arc" cx="88" cy="88" r="68" fill="none" stroke="url(#dash-gradient-vq)" stroke-width="12" stroke-dasharray="325 427" stroke-linecap="round" transform="rotate(-90 88 88)" />
+                <defs>
+                  <linearGradient id="dash-gradient-vq" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8B5CF6" />
+                    <stop offset="100%" stop-color="#06B6D4" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-score-value" id="dash-overall-score">318</span>
+                <span class="gauge-max-score">/340</span>
+              </div>
+            </div>
+            <div class="gauge-meta-bottom">
+              <span class="gauge-section-name" style="font-size:1.15rem;">Overall</span>
+              <span class="score-delta-badge" id="dash-overall-delta">▲ +5 vs last week</span>
+            </div>
+          </div>
+
+          <!-- Quant Dial -->
+          <div class="radial-gauge-card">
+            <div class="gauge-svg-wrap" style="width:140px;height:140px;">
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10" stroke-dasharray="7 5" />
+                <circle id="dash-quant-arc" cx="70" cy="70" r="54" fill="none" stroke="#0EA5E9" stroke-width="10" stroke-dasharray="270 339" stroke-linecap="round" transform="rotate(-90 70 70)" />
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-score-value" id="dash-quant-score">162</span>
+                <span class="gauge-max-score">/170</span>
+              </div>
+            </div>
+            <div class="gauge-meta-bottom">
+              <span class="gauge-section-name">Quant</span>
+              <span class="score-delta-badge" id="dash-quant-delta">▲ +3 vs last week</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:center;margin-top:16px;">
+          <button class="btn btn-outline btn-sm" onclick="navigate('score-forecast')" style="color:#38BDF8;border-color:rgba(56,189,248,0.3);">
+            <span>View Full Score Diagnostics &amp; Quick Wins →</span>
+          </button>
+        </div>
+      </div>
+
       
       <!-- Structured Exam Preparation Tracks -->
       <div class="exam-tracks-grid">
@@ -547,6 +889,168 @@
             <button class="btn btn-primary btn-lg" id="start-mock-btn" onclick="startMockTest()" disabled>
               Select GRE or IELTS to launch official simulation
             </button>
+          </div>
+        </div>
+      </div>
+    <!-- Page: Score Forecast (Exambank AI) -->
+    <div id="page-score-forecast" class="page">
+      <div class="score-forecast-ink-section">
+        <div class="score-ink-header">
+          <h2>Predictive Score Forecasting Engine</h2>
+          <p>Exambank algorithms analyze your accuracy, question response times, and topic weights across the 130–170 score scale to project your official exam performance.</p>
+        </div>
+
+        <div class="score-gauges-row">
+          <!-- Verbal Forecast -->
+          <div class="radial-gauge-card">
+            <div class="gauge-svg-wrap" style="width:160px;height:160px;">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="62" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10" stroke-dasharray="7 5" />
+                <circle id="page-verbal-arc" cx="80" cy="80" r="62" fill="none" stroke="#8B5CF6" stroke-width="10" stroke-dasharray="290 389" stroke-linecap="round" transform="rotate(-90 80 80)" />
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-score-value" id="page-verbal-score">156</span>
+                <span class="gauge-max-score">/170</span>
+              </div>
+            </div>
+            <div class="gauge-meta-bottom">
+              <span class="gauge-section-name">Verbal Reasoning</span>
+              <span class="score-delta-badge" id="page-verbal-delta">▲ +2 vs last week</span>
+              <span style="font-size:0.75rem;color:#94A3B8;" id="page-verbal-percentile">~68th Percentile</span>
+            </div>
+          </div>
+
+          <!-- Overall Forecast -->
+          <div class="radial-gauge-card overall">
+            <div class="gauge-svg-wrap" style="width:200px;height:200px;">
+              <svg width="200" height="200" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="12" stroke-dasharray="8 6" />
+                <circle id="page-overall-arc" cx="100" cy="100" r="78" fill="none" stroke="url(#page-gradient-vq)" stroke-width="12" stroke-dasharray="375 490" stroke-linecap="round" transform="rotate(-90 100 100)" />
+                <defs>
+                  <linearGradient id="page-gradient-vq" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8B5CF6" />
+                    <stop offset="100%" stop-color="#06B6D4" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-score-value" id="page-overall-score" style="font-size:2.3rem;">318</span>
+                <span class="gauge-max-score">/340</span>
+              </div>
+            </div>
+            <div class="gauge-meta-bottom">
+              <span class="gauge-section-name" style="font-size:1.3rem;">Predicted Overall Score</span>
+              <span class="score-delta-badge" id="page-overall-delta" style="font-size:0.85rem;">▲ +5 vs last week</span>
+              <span style="font-size:0.8rem;color:#94A3B8;" id="page-overall-percentile">Target Range: 315–325</span>
+            </div>
+          </div>
+
+          <!-- Quant Forecast -->
+          <div class="radial-gauge-card">
+            <div class="gauge-svg-wrap" style="width:160px;height:160px;">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="62" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10" stroke-dasharray="7 5" />
+                <circle id="page-quant-arc" cx="80" cy="80" r="62" fill="none" stroke="#0EA5E9" stroke-width="10" stroke-dasharray="315 389" stroke-linecap="round" transform="rotate(-90 80 80)" />
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-score-value" id="page-quant-score">162</span>
+                <span class="gauge-max-score">/170</span>
+              </div>
+            </div>
+            <div class="gauge-meta-bottom">
+              <span class="gauge-section-name">Quantitative Reasoning</span>
+              <span class="score-delta-badge" id="page-quant-delta">▲ +3 vs last week</span>
+              <span style="font-size:0.75rem;color:#94A3B8;" id="page-quant-percentile">~78th Percentile</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Quick Wins Container -->
+        <div class="quick-wins-panel" style="margin-top:36px;">
+          <h3>⚡ Quick Wins: High-Yield Point Opportunities</h3>
+          <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:14px;">These 3 topics are costing you the most points. Drilling these will produce the fastest score gain:</p>
+          <div class="quick-wins-grid" id="quick-wins-list">
+            <!-- Dynamically populated from /api/analytics/score-forecast -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Error Log (Exambank AI) -->
+    <div id="page-error-log" class="page">
+      <div class="ai-tutor-banner">
+        <div>
+          <h3>⚠️ Exambank Error Log &amp; Diagnostic Review</h3>
+          <p>Every question you get wrong is automatically logged here. Review detailed Gemini AI explanations and re-attempt until you achieve 100% mastery.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="startInfinitePractice('gre','verbal')">
+          <span>⚡ Drill Weak Areas</span>
+        </button>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="exam-pill-group">
+          <button class="exam-pill active" id="err-filter-all" onclick="filterErrorLog('all')">All Errors (<span id="err-count-all">0</span>)</button>
+          <button class="exam-pill" id="err-filter-verbal" onclick="filterErrorLog('verbal')">Verbal</button>
+          <button class="exam-pill" id="err-filter-quant" onclick="filterErrorLog('quant')">Quant</button>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadErrorLog()">🔄 Refresh Log</button>
+      </div>
+
+      <div id="error-log-list" class="error-log-view">
+        <div style="text-align:center;padding:40px;color:var(--text-muted);">Loading your error log...</div>
+      </div>
+    </div>
+
+    <!-- Page: Study Plans (Exambank AI) -->
+    <div id="page-study-plans" class="page">
+      <div class="study-plans-section" style="margin-top:0;">
+        <div class="section-headline-center">
+          <h2>Adaptive Study Plans</h2>
+          <p>Choose between our 4-, 8-, and 12-week plans. Tailored to your target score and available daily study hours.</p>
+        </div>
+
+        <div class="study-plans-grid">
+          <div class="study-plan-card">
+            <div class="plan-header">
+              <h3>4-Week Sprint</h3>
+              <div class="plan-tagline">15–20 Hours/Week · Immediate Test-Takers</div>
+            </div>
+            <ul class="plan-features">
+              <li><span>✓</span> <strong>Week 1:</strong> High-yield arithmetic &amp; single-blank vocab</li>
+              <li><span>✓</span> <strong>Week 2:</strong> Data analysis &amp; idea chunk reading</li>
+              <li><span>✓</span> <strong>Week 3:</strong> Quantitative comparisons &amp; dual-blank sentence equivalence</li>
+              <li><span>✓</span> <strong>Week 4:</strong> 2 Full-length timed mock exams &amp; error review</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="activateStudyPlan('4-week')">Active 4-Week Plan</button>
+          </div>
+
+          <div class="study-plan-card featured">
+            <div class="plan-header">
+              <h3>8-Week Standard (Recommended)</h3>
+              <div class="plan-tagline">10–12 Hours/Week · Target Score 325+</div>
+            </div>
+            <ul class="plan-features">
+              <li><span>✓</span> <strong>Weeks 1–2:</strong> Core math concepts (Algebra, Geometry, Stats)</li>
+              <li><span>✓</span> <strong>Weeks 3–4:</strong> Reading in idea chunks &amp; 1,000 vocab sprint</li>
+              <li><span>✓</span> <strong>Weeks 5–6:</strong> Advanced QC traps &amp; multi-source data reasoning</li>
+              <li><span>✓</span> <strong>Weeks 7–8:</strong> 5 Full ETS/IDP simulation mocks with AI Tutor</li>
+            </ul>
+            <button class="btn btn-primary btn-full" onclick="activateStudyPlan('8-week')">Active 8-Week Plan</button>
+          </div>
+
+          <div class="study-plan-card">
+            <div class="plan-header">
+              <h3>12-Week Comprehensive</h3>
+              <div class="plan-tagline">6–8 Hours/Week · Complete 99th-Percentile Mastery</div>
+            </div>
+            <ul class="plan-features">
+              <li><span>✓</span> <strong>Weeks 1–4:</strong> Deep foundational review across all topics</li>
+              <li><span>✓</span> <strong>Weeks 5–8:</strong> 2.58M vocab engine + advanced difficulty questions</li>
+              <li><span>✓</span> <strong>Weeks 9–10:</strong> AWA Essay writing &amp; IELTS band 8+ feedback</li>
+              <li><span>✓</span> <strong>Weeks 11–12:</strong> 8 Official simulation tests &amp; final polishing</li>
+            </ul>
+            <button class="btn btn-outline btn-full" onclick="activateStudyPlan('12-week')">Active 12-Week Plan</button>
           </div>
         </div>
       </div>
