@@ -19,3 +19,9 @@ async def init_db():
     from backend import models  # noqa: F401
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        from sqlalchemy import text
+        try:
+            await conn.execute(text("ALTER TABLE users ADD COLUMN phone_number VARCHAR"))
+        except Exception:
+            pass
+

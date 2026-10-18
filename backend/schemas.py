@@ -9,17 +9,39 @@ class UserCreate(BaseModel):
     email: EmailStr
     username: str
     password: str
+    phone_number: Optional[str] = None
     target_exam: Optional[str] = "both"
     target_score: Optional[float] = None
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str # can be email or phone number
     password: str
+
+class SendOTPRequest(BaseModel):
+    phone_number: str
+    purpose: str = "login" # 'login' or 'forgot_password'
+
+class VerifyOTPLoginRequest(BaseModel):
+    phone_number: str
+    otp: str
+
+class ResetPasswordWithOTPRequest(BaseModel):
+    phone_number: str
+    otp: str
+    new_password: str
+
+class OTPResponse(BaseModel):
+    status: str
+    message: str
+    phone_number: str
+    demo_otp: Optional[str] = None
+    expires_in_seconds: int = 300
 
 class UserOut(BaseModel):
     id: int
     email: str
     username: str
+    phone_number: Optional[str] = None
     target_exam: str
     target_score: Optional[float]
     created_at: datetime
@@ -30,6 +52,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
     user: UserOut
+
 
 
 # ── Questions ─────────────────────────────────────────────────────────────────

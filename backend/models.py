@@ -9,6 +9,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     username = Column(String, unique=True, index=True, nullable=False)
+    phone_number = Column(String, unique=True, index=True, nullable=True)
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     target_exam = Column(String, default="both")  # gre, ielts, both
@@ -16,6 +17,18 @@ class User(Base):
     
     sessions = relationship("TestSession", back_populates="user")
     flashcard_progress = relationship("FlashcardProgress", back_populates="user")
+
+
+class OTPVerification(Base):
+    __tablename__ = "otp_verifications"
+    id = Column(Integer, primary_key=True, index=True)
+    phone_number = Column(String, index=True, nullable=False)
+    otp_code = Column(String, nullable=False)
+    purpose = Column(String, default="login")  # 'login' or 'forgot_password'
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, nullable=False)
+    is_used = Column(Boolean, default=False)
+
 
 
 class Question(Base):

@@ -55,13 +55,34 @@ async function api(method, path, body = null) {
 /* ═══════════════════════════════════════════
    AUTH
    ═══════════════════════════════════════════ */
-function showLogin() {
-  document.getElementById('login-form').classList.add('active');
-  document.getElementById('register-form').classList.remove('active');
+/* ═══════════════════════════════════════════
+   AUTH & OTP RECOVERY ENGINE
+   ═══════════════════════════════════════════ */
+let otpLoginTimerInterval = null;
+let fpTimerInterval = null;
+
+function hideAllAuthForms() {
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
 }
+
+function showLogin() {
+  hideAllAuthForms();
+  document.getElementById('login-form').classList.add('active');
+}
+
 function showRegister() {
+  hideAllAuthForms();
   document.getElementById('register-form').classList.add('active');
-  document.getElementById('login-form').classList.remove('active');
+}
+
+function showOTPLoginForm() {
+  hideAllAuthForms();
+  document.getElementById('otp-login-form').classList.add('active');
+}
+
+function showForgotPasswordForm() {
+  hideAllAuthForms();
+  document.getElementById('forgot-password-form').classList.add('active');
 }
 
 async function handleLogin() {
@@ -71,7 +92,7 @@ async function handleLogin() {
   const btn = document.getElementById('login-btn');
   
   errEl.classList.add('hidden');
-  if (!email || !password) { showError(errEl, 'Please fill in all fields'); return; }
+  if (!email || !password) { showError(errEl, 'Please enter your email or phone number and password'); return; }
   
   setLoading(btn, true);
   try {
@@ -87,18 +108,22 @@ async function handleLogin() {
 async function handleRegister() {
   const username = document.getElementById('reg-username').value.trim();
   const email = document.getElementById('reg-email').value.trim();
+  const phone_number = document.getElementById('reg-phone')?.value.trim() || null;
   const password = document.getElementById('reg-password').value;
   const target_exam = document.getElementById('reg-exam').value;
   const errEl = document.getElementById('reg-error');
   const btn = document.getElementById('reg-btn');
   
   errEl.classList.add('hidden');
-  if (!username || !email || !password) { showError(errEl, 'Please fill in all fields'); return; }
+  if (!username || !email || !password) { showError(errEl, 'Please fill in all required fields'); return; }
   if (password.length < 6) { showError(errEl, 'Password must be at least 6 characters'); return; }
   
   setLoading(btn, true);
   try {
-    const data = await api('POST', '/auth/register', { username, email, password, target_exam });
+    const data = await api('POST', '/auth/register', { 
+      username, email, password, phone_number, target_exam 
+    });
+    showToast('🎉 Account created successfully! Welcome to PrepAce.', 'success');
     onLoginSuccess(data);
   } catch (e) {
     showError(errEl, e.message);
@@ -106,6 +131,178 @@ async function handleRegister() {
     setLoading(btn, false);
   }
 }
+
+// ── Mobile OTP Login ──────────────────────────────────────────
+async function handleSendOTPLogin() {
+  const phone = document.getElementById('otp-login-phone').value.trim();
+  const errEl = document.getElementById('otp-login-error');
+  const successEl = document.getElementById('otp-login-success');
+  const btn = document.getElementById('otp-login-send-btn');
+  
+  errEl.classList.add('hidden');
+  successEl.classList.add('hidden');
+  
+  if (!phone || phone.length < 10) {
+    showError(errEl, 'Please enter a valid 10-digit mobile phone number');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  
+  try {
+    const res = await api('POST', '/auth/send-otp', { phone_number: phone, purpose: 'login' });
+    document.getElementById('otp-login-code-group').classList.remove('hidden');
+    document.getElementById('otp-verify-login-btn').disabled = false;
+    
+    successEl.textContent = res.message;
+    successEl.classList.remove('hidden');
+    
+    if (res.demo_otp) {
+      showToast(`📱 SMS: Your PrepAce verification code is [ ${res.demo_otp} ]`, 'success');
+      // Auto-fill demo OTP for one-click testing
+      const codeInput = document.getElementById('otp-login-code');
+      codeInput.value = res.demo_otp;
+      codeInput.focus();
+    }
+    
+    // 60-second countdown
+    let secondsLeft = 60;
+    clearInterval(otpLoginTimerInterval);
+    const countdownEl = document.getElementById('otp-login-countdown');
+    countdownEl.textContent = `Resend in ${secondsLeft}s`;
+    
+    otpLoginTimerInterval = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft <= 0) {
+        clearInterval(otpLoginTimerInterval);
+        countdownEl.textContent = '';
+        btn.disabled = false;
+        btn.textContent = 'Resend OTP';
+      } else {
+        countdownEl.textContent = `Resend in ${secondsLeft}s`;
+      }
+    }, 1000);
+  } catch (e) {
+    showError(errEl, e.message);
+    btn.disabled = false;
+    btn.textContent = 'Send OTP';
+  }
+}
+
+async function handleVerifyOTPLogin() {
+  const phone = document.getElementById('otp-login-phone').value.trim();
+  const otp = document.getElementById('otp-login-code').value.trim();
+  const errEl = document.getElementById('otp-login-error');
+  const btn = document.getElementById('otp-verify-login-btn');
+  
+  errEl.classList.add('hidden');
+  if (!otp || otp.length !== 6) {
+    showError(errEl, 'Please enter the 6-digit OTP code');
+    return;
+  }
+  
+  setLoading(btn, true);
+  try {
+    const data = await api('POST', '/auth/verify-otp-login', { phone_number: phone, otp });
+    showToast('✅ Mobile phone verified! Signing you in...', 'success');
+    onLoginSuccess(data);
+  } catch (e) {
+    showError(errEl, e.message);
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
+// ── Forgot Password via Mobile OTP ─────────────────────────────
+async function handleSendForgotOTP() {
+  const phone = document.getElementById('fp-phone').value.trim();
+  const errEl = document.getElementById('fp-error');
+  const successEl = document.getElementById('fp-success');
+  const btn = document.getElementById('fp-send-btn');
+  
+  errEl.classList.add('hidden');
+  successEl.classList.add('hidden');
+  
+  if (!phone || phone.length < 10) {
+    showError(errEl, 'Please enter your registered 10-digit mobile number');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  
+  try {
+    const res = await api('POST', '/auth/send-otp', { phone_number: phone, purpose: 'forgot_password' });
+    document.getElementById('fp-fields-group').classList.remove('hidden');
+    document.getElementById('fp-submit-btn').disabled = false;
+    
+    successEl.textContent = res.message;
+    successEl.classList.remove('hidden');
+    
+    if (res.demo_otp) {
+      showToast(`📱 SMS: Your password reset OTP is [ ${res.demo_otp} ]`, 'success');
+      const otpInput = document.getElementById('fp-otp');
+      otpInput.value = res.demo_otp;
+      document.getElementById('fp-new-password')?.focus();
+    }
+    
+    let secondsLeft = 60;
+    clearInterval(fpTimerInterval);
+    const countdownEl = document.getElementById('fp-countdown');
+    countdownEl.textContent = `Resend in ${secondsLeft}s`;
+    
+    fpTimerInterval = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft <= 0) {
+        clearInterval(fpTimerInterval);
+        countdownEl.textContent = '';
+        btn.disabled = false;
+        btn.textContent = 'Resend OTP';
+      } else {
+        countdownEl.textContent = `Resend in ${secondsLeft}s`;
+      }
+    }, 1000);
+  } catch (e) {
+    showError(errEl, e.message);
+    btn.disabled = false;
+    btn.textContent = 'Send OTP';
+  }
+}
+
+async function handleResetPasswordOTP() {
+  const phone = document.getElementById('fp-phone').value.trim();
+  const otp = document.getElementById('fp-otp').value.trim();
+  const new_password = document.getElementById('fp-new-password').value;
+  const errEl = document.getElementById('fp-error');
+  const btn = document.getElementById('fp-submit-btn');
+  
+  errEl.classList.add('hidden');
+  if (!otp || otp.length !== 6) {
+    showError(errEl, 'Please enter the 6-digit verification code');
+    return;
+  }
+  if (!new_password || new_password.length < 6) {
+    showError(errEl, 'New password must be at least 6 characters');
+    return;
+  }
+  
+  setLoading(btn, true);
+  try {
+    const data = await api('POST', '/auth/reset-password-otp', {
+      phone_number: phone,
+      otp,
+      new_password
+    });
+    showToast('🔑 Password reset successfully! Signed in with your new password.', 'success');
+    onLoginSuccess(data);
+  } catch (e) {
+    showError(errEl, e.message);
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
 
 function onLoginSuccess(data) {
   token = data.access_token;
