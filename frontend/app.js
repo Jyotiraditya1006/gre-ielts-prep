@@ -123,7 +123,7 @@ async function handleRegister() {
     const data = await api('POST', '/auth/register', { 
       username, email, password, phone_number, target_exam 
     });
-    showToast('🎉 Account created successfully! Welcome to PrepAce.', 'success');
+    showToast('🎉 Account created successfully! Welcome to ApexPrep AI.', 'success');
     onLoginSuccess(data);
   } catch (e) {
     showError(errEl, e.message);
@@ -159,7 +159,7 @@ async function handleSendOTPLogin() {
     successEl.classList.remove('hidden');
     
     if (res.demo_otp) {
-      showToast(`📱 SMS: Your PrepAce verification code is [ ${res.demo_otp} ]`, 'success');
+      showToast(`📱 SMS: Your ApexPrep AI verification code is [ ${res.demo_otp} ]`, 'success');
       // Auto-fill demo OTP for one-click testing
       const codeInput = document.getElementById('otp-login-code');
       codeInput.value = res.demo_otp;
@@ -410,7 +410,7 @@ function navigate(page) {
   const titles = {
     'dashboard': 'Dashboard',
     'score-forecast': 'Score Forecasting & Diagnostics',
-    'error-log': 'Exambank Error Log',
+    'error-log': 'ApexPrep Error Log',
     'study-plans': 'Adaptive Study Plans',
     'gre-verbal': 'GRE Verbal Reasoning',
     'gre-quant': 'GRE Quantitative',
@@ -426,23 +426,23 @@ function navigate(page) {
   
   // Dynamic flowy breadcrumb
   const breadcrumbs = {
-    'dashboard': 'Exambank / Dashboard',
-    'score-forecast': 'Exambank / AI Engine / Score Forecast',
-    'error-log': 'Exambank / Diagnostics / Error Log',
-    'study-plans': 'Exambank / Strategy / Study Plans',
-    'gre-verbal': 'Exambank / GRE / Verbal Reasoning',
-    'gre-quant': 'Exambank / GRE / Quantitative Reasoning',
-    'gre-awa': 'Exambank / GRE / Analytical Writing',
-    'ielts-reading': 'Exambank / IELTS / Academic Reading',
-    'ielts-writing': 'Exambank / IELTS / Academic Writing',
-    'ielts-speaking': 'Exambank / IELTS / Speaking & Interview',
-    'flashcards': 'Exambank / Study Tools / Vocabulary Flashcards',
-    'mock-test': 'Exambank / Examination / Full Mock Test',
-    'analytics': 'Exambank / Insights / Analytics'
+    'dashboard': 'ApexPrep AI / Dashboard',
+    'score-forecast': 'ApexPrep AI / AI Engine / Score Forecast',
+    'error-log': 'ApexPrep AI / Diagnostics / Error Log',
+    'study-plans': 'ApexPrep AI / Strategy / Study Plans',
+    'gre-verbal': 'ApexPrep AI / GRE / Verbal Reasoning',
+    'gre-quant': 'ApexPrep AI / GRE / Quantitative Reasoning',
+    'gre-awa': 'ApexPrep AI / GRE / Analytical Writing',
+    'ielts-reading': 'ApexPrep AI / IELTS / Academic Reading',
+    'ielts-writing': 'ApexPrep AI / IELTS / Academic Writing',
+    'ielts-speaking': 'ApexPrep AI / IELTS / Speaking & Interview',
+    'flashcards': 'ApexPrep AI / Study Tools / Vocabulary Flashcards',
+    'mock-test': 'ApexPrep AI / Examination / Full Mock Test',
+    'analytics': 'ApexPrep AI / Insights / Analytics'
   };
   const bcEl = document.getElementById('header-breadcrumb');
   if (bcEl) {
-    const raw = breadcrumbs[page] || `Exambank / ${page}`;
+    const raw = breadcrumbs[page] || `ApexPrep AI / ${page}`;
     const parts = raw.split(' / ');
     bcEl.innerHTML = parts.slice(0, -1).join(' &nbsp;/&nbsp; ') + ` &nbsp;/&nbsp; <span>${parts.slice(-1)}</span>`;
   }

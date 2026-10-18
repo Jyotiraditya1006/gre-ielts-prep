@@ -1,10 +1,10 @@
-# 🎓 PrepAce — GRE® & IELTS™ Comprehensive Prep Platform
+# 🎓 ApexPrep AI (ApexPrep.ai) — GRE® & IELTS™ Comprehensive Prep Platform
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Cloudflare%20Public%20Tunnel-blue?style=for-the-badge&logo=cloudflare)](https://eric-lectures-consists-comprehensive.trycloudflare.com)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-> A production-grade, full-fidelity preparation and exam simulation platform for **ETS GRE® General Test** and **IDP / British Council Computer-Delivered IELTS™**. Features authentic testing interfaces, official diagnostic scoring, a 2.58M+ word morphological vocabulary lexicon, and sub-millisecond infinite question generation.
+> A production-grade, state-of-the-art preparation platform modeled after **Exambank AI** for **ETS GRE® General Test** and **IDP / British Council Computer-Delivered IELTS™**. Features authentic testing interfaces, real-time radial score forecasting, dual Dark/Light mode theme system, official diagnostic scoring, a 2.58M+ word morphological vocabulary lexicon, and phone OTP authentication.
 
 ---
 

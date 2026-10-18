@@ -131,7 +131,7 @@ async def send_otp(req: schemas.SendOTPRequest, db: AsyncSession = Depends(get_d
     # Simulated SMS gateway dispatch log (pluggable with Twilio/Fast2SMS/AWS SNS)
     print(f"\n=======================================================")
     print(f"📩 [SMS GATEWAY SIMULATION] To: {phone}")
-    print(f"💬 Message: Your PrepAce verification code is: {otp}. Valid for 5 minutes. Do not share.")
+    print(f"💬 Message: Your ApexPrep AI verification code is: {otp}. Valid for 5 minutes. Do not share.")
     print(f"=======================================================\n")
     
     # Return masked phone and demo_otp for instant seamless testing
@@ -178,7 +178,7 @@ async def verify_otp_login(req: schemas.VerifyOTPLoginRequest, db: AsyncSession 
         # Auto-create profile for this phone number
         short_num = phone[-6:]
         auto_username = f"user_{short_num}_{secrets.randbelow(9999)}"
-        auto_email = f"{short_num}_{secrets.token_hex(3)}@student.prepace.com"
+        auto_email = f"{short_num}_{secrets.token_hex(3)}@student.apexprep.ai"
         user = models.User(
             email=auto_email,
             username=auto_username,
