@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrepAce – GRE & IELTS Exam Preparation Platform</title>
+  <meta name="description" content="Master GRE and IELTS with AI-powered practice tests, adaptive flashcards, and in-depth analytics. Study smarter, score higher." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+
+<!-- ─── Auth Overlay ──────────────────────────────────────────────────────── -->
+<div id="auth-overlay" class="auth-overlay">
+  <div class="auth-bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="auth-container">
+    <div class="auth-brand">
+      <div class="brand-icon">🎓</div>
+      <h1 class="brand-name">PrepAce</h1>
+      <p class="brand-tagline">GRE & IELTS Mastery Platform</p>
+    </div>
+    
+    <!-- Login Form -->
+    <div id="login-form" class="auth-form active">
+      <h2>Welcome back</h2>
+      <p class="auth-subtitle">Continue your exam preparation journey</p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <div id="login-error" class="auth-error hidden"></div>
+      <button class="btn btn-primary btn-full" id="login-btn" onclick="handleLogin()">
+        <span class="btn-text">Sign In</span>
+        <span class="btn-loader hidden">⏳</span>
+      </button>
+      <p class="auth-switch">Don't have an account? <a href="#" onclick="showRegister()">Create one free</a></p>
+    </div>
+    
+    <!-- Register Form -->
+    <div id="register-form" class="auth-form">
+      <h2>Get started free</h2>
+      <p class="auth-subtitle">Join thousands preparing for GRE & IELTS</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="reg-username" placeholder="johndoe" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="your@email.com" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Min. 8 characters" />
+      </div>
+      <div class="form-group">
+        <label>Target Exam</label>
+        <select id="reg-exam">
+          <option value="both">Both GRE & IELTS</option>
+          <option value="gre">GRE Only</option>
+          <option value="ielts">IELTS Only</option>
+        </select>
+      </div>
+      <div id="reg-error" class="auth-error hidden"></div>
+      <button class="btn btn-primary btn-full" id="reg-btn" onclick="handleRegister()">
+        <span class="btn-text">Create Account</span>
+        <span class="btn-loader hidden">⏳</span>
+      </button>
+      <p class="auth-switch">Already have an account? <a href="#" onclick="showLogin()">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Main App ──────────────────────────────────────────────────────────── -->
+<div id="app" class="app hidden">
+  
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon-sm">🎓</div>
+      <span class="sidebar-brand">PrepAce</span>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebar-toggle">☰</button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+        <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+      </a>
+      <div class="nav-section-label">GRE</div>
+      <a href="#" class="nav-item" data-page="gre-verbal" onclick="navigate('gre-verbal')">
+        <span class="nav-icon">📚</span><span class="nav-label">Verbal Reasoning</span>
+      </a>
+      <a href="#" class="nav-item" data-page="gre-quant" onclick="navigate('gre-quant')">
+        <span class="nav-icon">🔢</span><span class="nav-label">Quantitative</span>
+      </a>
+      <a href="#" class="nav-item" data-page="gre-awa" onclick="navigate('gre-awa')">
+        <span class="nav-icon">✍️</span><span class="nav-label">AWA Writing</span>
+      </a>
+      <div class="nav-section-label">IELTS</div>
+      <a href="#" class="nav-item" data-page="ielts-reading" onclick="navigate('ielts-reading')">
+        <span class="nav-icon">📖</span><span class="nav-label">Reading</span>
+      </a>
+      <a href="#" class="nav-item" data-page="ielts-writing" onclick="navigate('ielts-writing')">
+        <span class="nav-icon">📝</span><span class="nav-label">Writing</span>
+      </a>
+      <a href="#" class="nav-item" data-page="ielts-speaking" onclick="navigate('ielts-speaking')">
+        <span class="nav-icon">🎤</span><span class="nav-label">Speaking</span>
+      </a>
+      <div class="nav-section-label">Tools</div>
+      <a href="#" class="nav-item" data-page="flashcards" onclick="navigate('flashcards')">
+        <span class="nav-icon">🃏</span><span class="nav-label">Flashcards</span>
+      </a>
+      <a href="#" class="nav-item" data-page="mock-test" onclick="navigate('mock-test')">
+        <span class="nav-icon">🏆</span><span class="nav-label">Full Mock Test</span>
+      </a>
+      <a href="#" class="nav-item" data-page="analytics" onclick="navigate('analytics')">
+        <span class="nav-icon">📈</span><span class="nav-label">Analytics</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info" id="sidebar-user">
+        <div class="user-avatar" id="user-avatar">J</div>
+        <div class="user-details">
+          <span class="user-name" id="user-name-display">User</span>
+          <span class="user-exam" id="user-exam-display">GRE & IELTS</span>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">⬅ Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content">
+    <div class="page-header" id="page-header">
+      <div class="header-left">
+        <div class="header-breadcrumb" id="header-breadcrumb">PrepAce &nbsp;/&nbsp; Practice &nbsp;/&nbsp; <span>Overview</span></div>
+        <h1 id="page-title">Dashboard</h1>
+      </div>
+      <div class="header-actions">
+        <!-- Exam Switcher Pill -->
+        <div class="exam-pill-group" role="tablist">
+          <button class="exam-pill active" id="pill-all" onclick="filterExamMode('all')">All Exams</button>
+          <button class="exam-pill" id="pill-gre" onclick="filterExamMode('gre')">GRE</button>
+          <button class="exam-pill" id="pill-ielts" onclick="filterExamMode('ielts')">IELTS</button>
+        </div>
+        
+        <!-- Subtle AI Status Pill -->
+        <div class="ai-status-pill" id="ai-badge" title="Gemini 3.8 Flash &amp; Infinite Procedural Engine Active">
+          <span class="ai-dot"></span>
+          <span class="ai-status-text">AI Online</span>
+        </div>
+        
+        <!-- Shortcuts Icon Button -->
+        <button class="btn btn-icon btn-outline btn-shortcuts" onclick="toggleShortcutsModal()" title="Keyboard Shortcuts (Alt+S, Alt+I)">
+          <span>⌨</span>
+        </button>
+        
+        <!-- Quick Action Button -->
+        <button class="btn btn-primary btn-sm" onclick="startInfinitePractice('gre','quant')">
+          <span>⚡ Fast Launch</span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Page: Dashboard -->
+    <div id="page-dashboard" class="page active">
+      <!-- Minimalist Executive Welcome & Metric Bar -->
+      <div class="welcome-banner" id="welcome-banner">
+        <div class="welcome-text">
+          <h2 id="welcome-greeting">Good evening 👋</h2>
+          <p>GRE &amp; IELTS adaptive preparation platform powered by Gemini AI.</p>
+        </div>
+        <div class="welcome-stats">
+          <div class="mini-stat">
+            <span class="mini-stat-value" id="dash-streak">0</span>
+            <span class="mini-stat-label">Day Streak 🔥</span>
+          </div>
+          <div class="mini-stat-divider"></div>
+          <div class="mini-stat">
+            <span class="mini-stat-value" id="dash-total">0</span>
+            <span class="mini-stat-label">Questions Done</span>
+          </div>
+          <div class="mini-stat-divider"></div>
+          <div class="mini-stat">
+            <span class="mini-stat-value" id="dash-accuracy">0%</span>
+            <span class="mini-stat-label">Accuracy Rate</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Structured Exam Preparation Tracks -->
+      <div class="exam-tracks-grid">
+        <!-- GRE Examination Track -->
+        <div class="exam-track-card track-gre" id="track-gre">
+          <div class="track-header">
+            <div class="track-header-meta">
+              <span class="track-badge badge-gre">GRE Track</span>
+              <span class="track-score-info">340 Score Scale · ETS Format</span>
+            </div>
+            <h3>Graduate Record Examination</h3>
+            <p>Master Verbal, Quantitative, and Analytical Writing with section-timed practice.</p>
+          </div>
+          
+          <div class="track-modules">
+            <div class="track-module-item" onclick="navigate('gre-verbal')">
+              <div class="module-icon">📚</div>
+              <div class="module-info">
+                <h4>Verbal Reasoning</h4>
+                <p>Text Completion, Sentence Equivalence &amp; Reading Passages</p>
+              </div>
+              <button class="btn-module-action" tabindex="-1">Practice →</button>
+            </div>
+            
+            <div class="track-module-item" onclick="navigate('gre-quant')">
+              <div class="module-info-left">
+                <div class="module-icon">🔢</div>
+                <div class="module-info">
+                  <h4>Quantitative Reasoning</h4>
+                  <p>Problem Solving, Quantitative Comparison &amp; Data Analysis</p>
+                </div>
+              </div>
+              <button class="btn-module-action" tabindex="-1">Practice →</button>
+            </div>
+            
+            <div class="track-module-item" onclick="navigate('gre-awa')">
+              <div class="module-icon">✍️</div>
+              <div class="module-info">
+                <h4>Analytical Writing (AWA)</h4>
+                <p>Analyze an Issue &amp; Argument Critique with AI Band Scoring</p>
+              </div>
+              <button class="btn-module-action" tabindex="-1">Draft →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- IELTS Examination Track -->
+        <div class="exam-track-card track-ielts" id="track-ielts">
+          <div class="track-header">
+            <div class="track-header-meta">
+              <span class="track-badge badge-ielts">IELTS Track</span>
+              <span class="track-score-info">Band 9.0 Scale · IDP / British Council</span>
+            </div>
+            <h3>IELTS Academic &amp; General</h3>
+            <p>Target Band 7.5+ in Reading, Writing Tasks 1 &amp; 2, and Speaking interviews.</p>
+          </div>
+          
+          <div class="track-modules">
+            <div class="track-module-item" onclick="navigate('ielts-reading')">
+              <div class="module-icon">📖</div>
+              <div class="module-info">
+                <h4>Reading Module</h4>
+                <p>Passages, True/False/Not Given &amp; Matching Headings</p>
+              </div>
+              <button class="btn-module-action" tabindex="-1">Practice →</button>
+            </div>
+            
+            <div class="track-module-item" onclick="navigate('ielts-writing')">
+              <div class="module-icon">📝</div>
+              <div class="module-info">
+                <h4>Writing Module</h4>
+                <p>Task 1 Visual Reports &amp; Task 2 Academic Essays with Evaluation</p>
+              </div>
+              <button class="btn-module-action" tabindex="-1">Practice →</button>
+            </div>
+            
+            <div class="track-module-item" onclick="navigate('ielts-speaking')">
+              <div class="module-icon">🎤</div>
+              <div class="module-info">
+                <h4>Speaking Simulation</h4>
+                <p>Part 1 Personal, Part 2 Cue Card &amp; Part 3 Abstract Discussion</p>
+              </div>
+              <button class="btn-module-action" tabindex="-1">Practice →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Utilities Strip -->
+      <div class="utility-shelf">
+        <div class="utility-card" onclick="startInfinitePractice('gre','quant')">
+          <div class="utility-top">
+            <span class="utility-badge">♾️ Continuous Stream</span>
+            <span class="utility-arrow">⚡</span>
+          </div>
+          <h4>Infinite Practice</h4>
+          <p>Millions of procedural and AI questions generated non-stop on demand.</p>
+        </div>
+        
+        <div class="utility-card" onclick="navigate('flashcards')">
+          <div class="utility-top">
+            <span class="utility-badge">🃏 Spaced Repetition</span>
+            <span class="utility-arrow">→</span>
+          </div>
+          <h4>Vocabulary Vault</h4>
+          <p>1,200 high-yield words with smart scheduling and memory retention review.</p>
+        </div>
+        
+        <div class="utility-card" onclick="navigate('mock-test')">
+          <div class="utility-top">
+            <span class="utility-badge">🏆 Exam Simulation</span>
+            <span class="utility-arrow">→</span>
+          </div>
+          <h4>Full Mock Test</h4>
+          <p>Timed, official-style multi-section tests with scaled percentile scoring.</p>
+        </div>
+      </div>
+
+      <!-- Recent Performance -->
+      <div class="recent-section">
+        <div class="section-header-row">
+          <h3 class="section-title">Recent Activity</h3>
+          <span class="section-subtitle">Your latest practice sessions and performance metrics</span>
+        </div>
+        <div id="recent-sessions-list" class="recent-list">
+          <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <p>No practice sessions yet. Start one above!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Practice (shared for all sections) -->
+    <div id="page-practice" class="page">
+      <div class="practice-container" id="practice-container">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+    <!-- Page: Flashcards -->
+    <!-- Page: Flashcards -->
+    <div id="page-flashcards" class="page">
+      <div id="flashcard-container">
+        <!-- Million-Word Lexicon Search Bar -->
+        <div class="lexicon-search-bar">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="vocab-search-input" placeholder="Search 2,500,000+ words, Latin & Greek roots, or GRE/IELTS vocabulary (e.g. aberrant, alacrity, chron, bellicose)..." onkeydown="if(event.key==='Enter') searchLexiconWord()" />
+            <button class="btn btn-primary btn-sm" onclick="searchLexiconWord()">Lookup Word</button>
+            <button class="btn btn-outline btn-sm" onclick="startInfiniteWordStream()">♾️ Infinite Word Stream</button>
+          </div>
+        </div>
+
+        <div class="flashcard-controls">
+          <div class="filter-row">
+            <select id="fc-exam-filter" onchange="loadFlashcards()">
+              <option value="">All Exams</option>
+              <option value="gre">GRE Words</option>
+              <option value="ielts">IELTS Academic</option>
+            </select>
+            <select id="fc-diff-filter" onchange="loadFlashcards()">
+              <option value="">All Difficulties</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="startFlashcardSession()">▶ Spaced Repetition Review</button>
+          </div>
+          <div class="flashcard-stats-row" id="flashcard-stats-row">
+            <div class="fc-stat"><span id="fc-total">2,584,320+</span> <small>Indexed Lexicon</small></div>
+            <div class="fc-stat"><span id="fc-mastered">0</span> <small>Mastered Words</small></div>
+            <div class="fc-stat"><span id="fc-due">0</span> <small>Due Today</small></div>
+          </div>
+        </div>
+        <div id="flashcard-deck" class="flashcard-deck">
+          <!-- Cards grid populated dynamically -->
+        </div>
+      </div>
+      
+      <!-- Flashcard Review Mode -->
+      <div id="flashcard-review" class="flashcard-review hidden">
+        <div class="review-progress">
+          <span id="fc-progress-text">Card 1 of 20</span>
+          <div class="progress-bar"><div class="progress-fill" id="fc-progress-bar"></div></div>
+          <button class="btn btn-sm btn-outline" onclick="exitFlashcardReview()">✕ Exit</button>
+        </div>
+        <div class="flashcard-3d" id="flashcard-3d" onclick="flipCard()">
+          <div class="card-front" id="card-front">
+            <div class="card-exam-tag" id="card-exam-tag">GRE</div>
+            <div class="card-word" id="card-word">Loading...</div>
+            <div class="card-category" id="card-category">high-frequency</div>
+            <div class="card-hint">Click or press Space to reveal definition</div>
+          </div>
+          <div class="card-back" id="card-back">
+            <div class="card-definition" id="card-definition"></div>
+            <div class="card-example" id="card-example"></div>
+            <div class="card-mnemonic" id="card-mnemonic"></div>
+          </div>
+        </div>
+        <div class="rating-buttons hidden" id="rating-buttons">
+          <button class="rate-btn rate-again" onclick="rateCard(0)">🔁 Again</button>
+          <button class="rate-btn rate-hard" onclick="rateCard(1)">😓 Hard</button>
+          <button class="rate-btn rate-good" onclick="rateCard(2)">👍 Good</button>
+          <button class="rate-btn rate-easy" onclick="rateCard(3)">⚡ Easy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page: Analytics -->
+    <div id="page-analytics" class="page">
+      <div id="analytics-container">
+        <div class="loading-spinner">Loading analytics...</div>
+      </div>
+    </div>
+
+    <!-- Page: Mock Test -->
+    <div id="page-mock-test" class="page">
+      <div id="mock-test-container">
+        <div class="mock-setup">
+          <div class="mock-setup-card">
+            <div class="mock-header-badge">OFFICIAL EXAM SIMULATOR</div>
+            <h2>Authentic Full-Length Exam Simulations</h2>
+            <p>100% faithful replication of the real test interfaces, section timings, question structures, and official scoring rubrics.</p>
+            
+            <div class="mock-options">
+              <!-- Official GRE Card -->
+              <div class="mock-option" id="mock-gre" onclick="selectMock('gre')">
+                <div class="mock-card-top">
+                  <div class="mock-icon">🎓</div>
+                  <span class="duration-badge">~1 hr 58 mins</span>
+                </div>
+                <h3>Official ETS GRE® General Test</h3>
+                <div class="mock-format-tag">Current Official Shorter GRE Format</div>
+                <p>Exact 5 sequential timed sections with adaptive scoring:</p>
+                <ul class="mock-features-list">
+                  <li><strong>Section 1:</strong> Analytical Writing (Analyze an Issue · 30 mins)</li>
+                  <li><strong>Section 2:</strong> Verbal Reasoning 1 (12 Qs · 18 mins)</li>
+                  <li><strong>Section 3:</strong> Quantitative Reasoning 1 (12 Qs · 21 mins · On-Screen Calculator)</li>
+                  <li><strong>Section 4:</strong> Verbal Reasoning 2 (15 Qs · 23 mins)</li>
+                  <li><strong>Section 5:</strong> Quantitative Reasoning 2 (15 Qs · 26 mins · Calculator)</li>
+                  <li><strong>Tools:</strong> Official ETS Question Review Table, Mark flags, 4-Function Calculator</li>
+                  <li><strong>Scoring:</strong> Scaled Scores 130–170 per section (260–340 Total)</li>
+                </ul>
+              </div>
+
+              <!-- Official IELTS Card -->
+              <div class="mock-option" id="mock-ielts" onclick="selectMock('ielts')">
+                <div class="mock-card-top">
+                  <div class="mock-icon">🌍</div>
+                  <span class="duration-badge">~2 hrs 14 mins</span>
+                </div>
+                <h3>Official Computer-Delivered IELTS</h3>
+                <div class="mock-format-tag">IDP &amp; British Council Format</div>
+                <p>Exact 3 official test components with split-screen view:</p>
+                <ul class="mock-features-list">
+                  <li><strong>Component 1:</strong> Academic Reading (3 Full Passages · 40 Qs · 60 mins)</li>
+                  <li><strong>Component 2:</strong> Academic Writing (Task 1 Report + Task 2 Essay · 60 mins)</li>
+                  <li><strong>Component 3:</strong> Speaking Interview (Parts 1, 2, 3 with Cue Card Prep Timer · 14 mins)</li>
+                  <li><strong>Tools:</strong> 40-Question Navigation Ribbon, Split-Screen Text Highlight, Live Word Count</li>
+                  <li><strong>Scoring:</strong> Official Band Scale (0.0 to 9.0 in 0.5 increments)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="mock-difficulty-row">
+              <label>Simulation Mode:</label>
+              <select id="mock-simulation-mode">
+                <option value="official_timed">Full-Length Official Timed (Real Exam Strict Timing)</option>
+                <option value="practice_mode">Untimed Practice Mode (Study at your own pace)</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary btn-lg" id="start-mock-btn" onclick="startMockTest()" disabled>
+              Select GRE or IELTS to launch official simulation
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── Quiz Modal ─────────────────────────────────────────────────────────── -->
+<div id="quiz-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeQuizModal()"></div>
+  <div class="modal-container">
+    <div class="quiz-header">
+      <div class="quiz-info">
+        <span class="quiz-exam-badge" id="quiz-exam-badge">GRE Verbal</span>
+        <span class="quiz-progress" id="quiz-progress">Q 1/10</span>
+      </div>
+      <div class="quiz-timer" id="quiz-timer">
+        <span class="timer-icon">⏱</span>
+        <span id="timer-display">01:30</span>
+      </div>
+      <button class="btn btn-sm btn-outline btn-scratchpad-toggle" id="scratchpad-toggle-btn" onclick="toggleScratchpad()">📝 Scratchpad</button>
+      <button class="btn btn-sm btn-danger" onclick="endQuizEarly()">End Quiz</button>
+    </div>
+    
+    <!-- Expandable Scratchpad for math/notes -->
+    <div id="quiz-scratchpad" class="quiz-scratchpad hidden">
+      <div class="scratchpad-header">
+        <span>📝 Student Scratchpad (Math calculations & Draft notes)</span>
+        <button class="btn-clear-notes" onclick="clearScratchpad()">Clear</button>
+      </div>
+      <textarea id="scratchpad-notes" placeholder="Jot down notes, equations, or test rough work here... (auto-saved)"></textarea>
+    </div>
+
+    <div class="quiz-body" id="quiz-body">
+      <!-- Question dynamically injected -->
+    </div>
+    
+    <div class="quiz-footer">
+      <div class="question-dots" id="question-dots"></div>
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>
+        Next →
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── Results Modal ─────────────────────────────────────────────────────── -->
+<div id="results-modal" class="modal hidden">
+  <div class="modal-overlay"></div>
+  <div class="modal-container modal-results">
+    <div class="results-header">
+      <div class="results-trophy" id="results-trophy">🏆</div>
+      <h2 id="results-title">Quiz Complete!</h2>
+      <p id="results-subtitle">Here's how you did</p>
+    </div>
+    <div class="results-score-ring" id="results-score-ring">
+      <svg viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="50" class="ring-bg"/>
+        <circle cx="60" cy="60" r="50" class="ring-fill" id="score-ring-fill"/>
+      </svg>
+      <div class="ring-center">
+        <span class="ring-score" id="ring-score">0%</span>
+        <span class="ring-label" id="ring-label">Score</span>
+      </div>
+    </div>
+    <div class="results-stats">
+      <div class="result-stat">
+        <span class="stat-val" id="res-correct">0</span>
+        <span class="stat-lbl">Correct</span>
+      </div>
+      <div class="result-stat">
+        <span class="stat-val" id="res-total">0</span>
+        <span class="stat-lbl">Total</span>
+      </div>
+      <div class="result-stat">
+        <span class="stat-val" id="res-scaled">—</span>
+        <span class="stat-lbl">Scaled Score</span>
+      </div>
+      <div class="result-stat">
+        <span class="stat-val" id="res-time">0s</span>
+        <span class="stat-lbl">Avg Time/Q</span>
+      </div>
+    </div>
+    <div id="results-review" class="results-review">
+      <!-- Per-question review -->
+    </div>
+    <div class="results-actions">
+      <button class="btn btn-outline" onclick="closeResultsModal()">✕ Close</button>
+      <button class="btn btn-primary" onclick="retryPractice()">🔄 Try Again</button>
+      <button class="btn btn-secondary" onclick="navigate('analytics')">📊 View Analytics</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Official ETS GRE Exam Simulation Modal ────────────────────────────── -->
+<div id="gre-simulation-modal" class="exam-sim-modal hidden">
+  <div class="ets-header">
+    <div class="ets-header-top">
+      <div class="ets-title-left">
+        <span class="ets-brand">GRE® General Test</span>
+        <span class="ets-divider">|</span>
+        <span id="ets-section-title" class="ets-section-title">Section 2 of 5: Verbal Reasoning</span>
+      </div>
+      <div class="ets-header-center">
+        <span id="ets-question-counter" class="ets-q-counter">Question 1 of 12</span>
+      </div>
+      <div class="ets-header-right">
+        <div class="ets-timer-box">
+          <span class="ets-timer-label">Time Remaining:</span>
+          <span id="ets-timer-display" class="ets-timer-digits">18:00</span>
+        </div>
+        <button class="ets-btn ets-btn-timer-toggle" id="ets-timer-toggle-btn" onclick="toggleETSTimer()">Hide Time</button>
+      </div>
+    </div>
+    <div class="ets-toolbar">
+      <div class="ets-toolbar-left">
+        <button class="ets-tool-btn" onclick="openETSReviewModal()">📋 Review Screen</button>
+        <button class="ets-tool-btn" id="ets-mark-btn" onclick="toggleETSMark()">🏳️ Mark Question</button>
+        <button class="ets-tool-btn hidden" id="ets-calc-toggle-btn" onclick="toggleETSCalculator()">🧮 Calculator</button>
+        <button class="ets-tool-btn" onclick="toggleScratchpad()">📝 Scratchpad</button>
+      </div>
+      <div class="ets-toolbar-right">
+        <button class="ets-tool-btn ets-btn-exit" onclick="confirmExitETSSection()">Exit Section →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ets-body" id="ets-body">
+    <!-- Question or Essay Screen injected here -->
+  </div>
+
+  <div class="ets-footer">
+    <div class="ets-footer-left">
+      <span class="ets-flagged-indicator hidden" id="ets-flagged-indicator">✓ Marked for Review</span>
+    </div>
+    <div class="ets-footer-right">
+      <button class="ets-nav-btn" id="ets-back-btn" onclick="prevETSQuestion()" disabled>← Back</button>
+      <button class="ets-nav-btn ets-nav-primary" id="ets-next-btn" onclick="nextETSQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Official ETS On-Screen Calculator Modal ──────────────────────────── -->
+<div id="ets-calculator-modal" class="ets-calculator-window hidden">
+  <div class="ets-calc-header">
+    <span>Calculator</span>
+    <button class="ets-calc-close" onclick="toggleETSCalculator()">✕</button>
+  </div>
+  <div class="ets-calc-display">
+    <div class="ets-calc-subdisplay" id="ets-calc-mem-indicator"></div>
+    <input type="text" id="ets-calc-screen" value="0" readonly />
+  </div>
+  <div class="ets-calc-buttons">
+    <div class="ets-calc-row">
+      <button class="calc-btn calc-op" onclick="calcAction('MC')">MC</button>
+      <button class="calc-btn calc-op" onclick="calcAction('MR')">MR</button>
+      <button class="calc-btn calc-op" onclick="calcAction('MS')">MS</button>
+      <button class="calc-btn calc-op" onclick="calcAction('M+')">M+</button>
+      <button class="calc-btn calc-clear" onclick="calcAction('C')">C</button>
+      <button class="calc-btn calc-clear" onclick="calcAction('CE')">CE</button>
+    </div>
+    <div class="ets-calc-row">
+      <button class="calc-btn" onclick="calcDigit('7')">7</button>
+      <button class="calc-btn" onclick="calcDigit('8')">8</button>
+      <button class="calc-btn" onclick="calcDigit('9')">9</button>
+      <button class="calc-btn calc-op" onclick="calcOp('/')">/</button>
+      <button class="calc-btn calc-op" onclick="calcSqrt()">√</button>
+    </div>
+    <div class="ets-calc-row">
+      <button class="calc-btn" onclick="calcDigit('4')">4</button>
+      <button class="calc-btn" onclick="calcDigit('5')">5</button>
+      <button class="calc-btn" onclick="calcDigit('6')">6</button>
+      <button class="calc-btn calc-op" onclick="calcOp('*')">*</button>
+      <button class="calc-btn calc-op" onclick="calcSign()">±</button>
+    </div>
+    <div class="ets-calc-row">
+      <button class="calc-btn" onclick="calcDigit('1')">1</button>
+      <button class="calc-btn" onclick="calcDigit('2')">2</button>
+      <button class="calc-btn" onclick="calcDigit('3')">3</button>
+      <button class="calc-btn calc-op" onclick="calcOp('-')">-</button>
+      <button class="calc-btn calc-equal" onclick="calcEquals()">=</button>
+    </div>
+    <div class="ets-calc-row">
+      <button class="calc-btn calc-zero" onclick="calcDigit('0')">0</button>
+      <button class="calc-btn" onclick="calcDecimal()">.</button>
+      <button class="calc-btn calc-op" onclick="calcOp('+')">+</button>
+      <button class="calc-btn calc-transfer" onclick="transferCalcDisplay()">Transfer Display</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Official ETS Review Screen Modal ──────────────────────────────────── -->
+<div id="ets-review-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeETSReviewModal()"></div>
+  <div class="modal-container" style="max-width: 680px;">
+    <div class="modal-header" style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="font-size:1.15rem;font-weight:700;">Section Question Review Screen</h3>
+      <button onclick="closeETSReviewModal()" style="background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding: 20px 24px; max-height: 400px; overflow-y: auto;">
+      <p style="font-size:0.84rem;color:var(--text-secondary);margin-bottom:14px;">
+        Below is the list of all questions in this section. Questions marked with a flag are marked for review. Click any question row to return directly to that question.
+      </p>
+      <table class="ets-review-table">
+        <thead>
+          <tr>
+            <th>Question Number</th>
+            <th>Status</th>
+            <th>Marked</th>
+          </tr>
+        </thead>
+        <tbody id="ets-review-table-body">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid var(--border);text-align:right;">
+      <button class="btn btn-primary btn-sm" onclick="closeETSReviewModal()">Return to Current Question</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Official IDP / British Council Computer-Delivered IELTS Modal ──────── -->
+<div id="ielts-simulation-modal" class="exam-sim-modal hidden">
+  <div class="ielts-header">
+    <div class="ielts-header-left">
+      <div class="ielts-logo">IELTS</div>
+      <div class="ielts-candidate-info">
+        <span class="candidate-name">Candidate: Patankar, Janhavi</span>
+        <span class="candidate-no">Candidate No: 489211 &nbsp;|&nbsp; Centre: IN802</span>
+      </div>
+    </div>
+    <div class="ielts-header-center">
+      <span id="ielts-component-title" class="ielts-comp-title">Academic Reading · 60 minutes</span>
+    </div>
+    <div class="ielts-header-right">
+      <div class="ielts-timer" id="ielts-timer-box">
+        <span class="ielts-timer-icon">⏱</span>
+        <span id="ielts-timer-digits" class="ielts-digits">60:00</span>
+      </div>
+      <label class="ielts-review-checkbox-label">
+        <input type="checkbox" id="ielts-review-checkbox" onchange="toggleIELTSReviewFlag()" />
+        <span>Review</span>
+      </label>
+      <button class="ielts-btn-finish" onclick="confirmFinishIELTSComponent()">Finish Component →</button>
+    </div>
+  </div>
+
+  <div class="ielts-body" id="ielts-body">
+    <!-- Reading Split-Screen, Writing Tasks, or Speaking Module injected here -->
+  </div>
+
+  <!-- IELTS 40-Question Navigation Ribbon -->
+  <div class="ielts-ribbon" id="ielts-ribbon">
+    <div class="ribbon-passages-label">
+      <span class="ribbon-group-tag active" id="ribbon-grp-1" onclick="jumpIELTSPassage(1)">Passage 1 (1–13)</span>
+      <span class="ribbon-group-tag" id="ribbon-grp-2" onclick="jumpIELTSPassage(2)">Passage 2 (14–26)</span>
+      <span class="ribbon-group-tag" id="ribbon-grp-3" onclick="jumpIELTSPassage(3)">Passage 3 (27–40)</span>
+    </div>
+    <div class="ribbon-numbers" id="ielts-ribbon-numbers">
+      <!-- 40 Question tabs dynamically injected -->
+    </div>
+  </div>
+</div>
+
+<!-- ─── Lexicon Word Lookup Modal (Millions of Words) ──────────────────────── -->
+<div id="lexicon-word-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeLexiconWordModal()"></div>
+  <div class="modal-container" style="max-width: 580px;">
+    <div class="modal-header" style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="track-badge badge-gre" id="lwm-exam">GRE / IELTS</span>
+        <h3 id="lwm-word" style="font-size:1.4rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.02em;">aberrant</h3>
+      </div>
+      <button onclick="closeLexiconWordModal()" style="background:none;border:none;color:var(--text-muted);font-size:1.3rem;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding: 24px;" id="lwm-body">
+      <!-- Injected -->
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <span id="lwm-category" style="font-size:0.78rem;color:var(--text-muted);">Indexed in 2,500,000+ Word Lexicon</span>
+      <button class="btn btn-primary btn-sm" onclick="closeLexiconWordModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Keyboard Shortcuts Modal ─────────────────────────────────────────── -->
+<div id="shortcuts-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="toggleShortcutsModal()"></div>
+  <div class="modal-container" style="max-width: 480px;">
+    <div class="modal-header" style="padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+        <span>⌨️</span> Keyboard Shortcuts
+      </h3>
+      <button class="btn-close-modal" onclick="toggleShortcutsModal()" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">✕</button>
+    </div>
+    <div style="padding: 24px;">
+      <div class="shortcut-list">
+        <div class="shortcut-row"><span class="shortcut-desc">Select Option A / B / C / D / E</span><span class="shortcut-keys"><kbd>A</kbd> – <kbd>E</kbd> or <kbd>1</kbd> – <kbd>5</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Next Question / Submit</span><span class="shortcut-keys"><kbd>Enter</kbd> or <kbd>Space</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Toggle Scratchpad</span><span class="shortcut-keys"><kbd>Alt</kbd> + <kbd>S</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Launch Infinite Practice</span><span class="shortcut-keys"><kbd>Alt</kbd> + <kbd>I</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Close Modal / Scratchpad</span><span class="shortcut-keys"><kbd>Esc</kbd></span></div>
+      </div>
+      <div style="margin-top: 18px; text-align: center;">
+        <button class="btn btn-primary btn-sm" onclick="toggleShortcutsModal()">Got It</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Toast Notification ────────────────────────────────────────────────── -->
+<div id="toast" class="toast hidden"></div>
+
+
+<script src="app.js"></script>
+</body>
+</html>
